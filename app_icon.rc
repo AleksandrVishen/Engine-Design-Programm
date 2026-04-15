@@ -1,0 +1,3 @@
+#include "app/resource.h"
+
+IDI_APP_ICON ICON "assets\\icon\\EngineDesign.ico"

@@ -1,0 +1,15 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "msvc-vcpkg",
+            "generator": "Visual Studio 18 2026",
+"architecture": "x64",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_TARGET_TRIPLET": "x64-windows"
+            }
+        }
+    ]
+}

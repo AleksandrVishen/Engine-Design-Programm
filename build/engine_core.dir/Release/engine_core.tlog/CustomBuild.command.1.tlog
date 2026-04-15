@@ -1,0 +1,10 @@
+^C:\USERS\ALEKS\DOCUMENTS\PROGS\ENGINE_DESIGN\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/aleks/Documents/progs/engine_design -BC:/Users/aleks/Documents/progs/engine_design/build --check-stamp-file C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

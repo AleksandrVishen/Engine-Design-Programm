@@ -1,0 +1,104 @@
+[
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\common.dir\\core\\common\\common_types.cpp.obj /FdCMakeFiles\\common.dir\\common.pdb /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\core\\common\\common_types.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/core/common/common_types.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/common.dir/core/common/common_types.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\common.dir\\core\\common\\ind_diag_common_types.cpp.obj /FdCMakeFiles\\common.dir\\common.pdb /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\core\\common\\ind_diag_common_types.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/core/common/ind_diag_common_types.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/common.dir/core/common/ind_diag_common_types.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\common.dir\\path_manager.cpp.obj /FdCMakeFiles\\common.dir\\common.pdb /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\path_manager.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/path_manager.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/common.dir/path_manager.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\common.dir\\ind_path_manager.cpp.obj /FdCMakeFiles\\common.dir\\common.pdb /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\ind_path_manager.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/ind_path_manager.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/common.dir/ind_path_manager.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\common.dir\\ind_Palpha_path_manager.cpp.obj /FdCMakeFiles\\common.dir\\common.pdb /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\ind_Palpha_path_manager.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/ind_Palpha_path_manager.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/common.dir/ind_Palpha_path_manager.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\kinematic.dir\\core\\Kinematic\\Calculations\\main_kinematic.cpp.obj /FdCMakeFiles\\kinematic.dir\\ /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\core\\Kinematic\\Calculations\\main_kinematic.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/core/Kinematic/Calculations/main_kinematic.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/kinematic.dir/core/Kinematic/Calculations/main_kinematic.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\kinematic.dir\\core\\Kinematic\\Calculations\\kinematic_formulas.cpp.obj /FdCMakeFiles\\kinematic.dir\\ /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\core\\Kinematic\\Calculations\\kinematic_formulas.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/core/Kinematic/Calculations/kinematic_formulas.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/kinematic.dir/core/Kinematic/Calculations/kinematic_formulas.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\kinematic.dir\\core\\Kinematic\\input_data\\kinematic_input.cpp.obj /FdCMakeFiles\\kinematic.dir\\ /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\core\\Kinematic\\input_data\\kinematic_input.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/core/Kinematic/input_data/kinematic_input.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/kinematic.dir/core/Kinematic/input_data/kinematic_input.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\kinematic.dir\\core\\Kinematic\\output_data\\kinematic_output.cpp.obj /FdCMakeFiles\\kinematic.dir\\ /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\core\\Kinematic\\output_data\\kinematic_output.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/core/Kinematic/output_data/kinematic_output.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/kinematic.dir/core/Kinematic/output_data/kinematic_output.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\ind_diag.dir\\core\\IND_Diagr\\calculations\\ind_diagr_main.cpp.obj /FdCMakeFiles\\ind_diag.dir\\ /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\core\\IND_Diagr\\calculations\\ind_diagr_main.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/core/IND_Diagr/calculations/ind_diagr_main.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/ind_diag.dir/core/IND_Diagr/calculations/ind_diagr_main.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\ind_diag.dir\\core\\IND_Diagr\\calculations\\calc_ind_diagr.cpp.obj /FdCMakeFiles\\ind_diag.dir\\ /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\core\\IND_Diagr\\calculations\\calc_ind_diagr.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/core/IND_Diagr/calculations/calc_ind_diagr.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/ind_diag.dir/core/IND_Diagr/calculations/calc_ind_diagr.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\ind_diag.dir\\core\\IND_Diagr\\input_data\\ind_diag_input.cpp.obj /FdCMakeFiles\\ind_diag.dir\\ /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\core\\IND_Diagr\\input_data\\ind_diag_input.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/core/IND_Diagr/input_data/ind_diag_input.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/ind_diag.dir/core/IND_Diagr/input_data/ind_diag_input.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\ind_diag.dir\\core\\IND_Diagr\\output_data\\ind_diag_output.cpp.obj /FdCMakeFiles\\ind_diag.dir\\ /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\core\\IND_Diagr\\output_data\\ind_diag_output.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/core/IND_Diagr/output_data/ind_diag_output.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/ind_diag.dir/core/IND_Diagr/output_data/ind_diag_output.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\Palpha_Diag.dir\\core\\Diag_Palpha\\Calculations\\main_Palpha.cpp.obj /FdCMakeFiles\\Palpha_Diag.dir\\ /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\core\\Diag_Palpha\\Calculations\\main_Palpha.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/core/Diag_Palpha/Calculations/main_Palpha.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/Palpha_Diag.dir/core/Diag_Palpha/Calculations/main_Palpha.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\Palpha_Diag.dir\\core\\Diag_Palpha\\Calculations\\calc_Palpha.cpp.obj /FdCMakeFiles\\Palpha_Diag.dir\\ /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\core\\Diag_Palpha\\Calculations\\calc_Palpha.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/core/Diag_Palpha/Calculations/calc_Palpha.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/Palpha_Diag.dir/core/Diag_Palpha/Calculations/calc_Palpha.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\Palpha_Diag.dir\\core\\Diag_Palpha\\Input_data\\Palpha_input.cpp.obj /FdCMakeFiles\\Palpha_Diag.dir\\ /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\core\\Diag_Palpha\\Input_data\\Palpha_input.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/core/Diag_Palpha/Input_data/Palpha_input.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/Palpha_Diag.dir/core/Diag_Palpha/Input_data/Palpha_input.cpp.obj"
+},
+{
+  "directory": "C:/Users/aleks/Documents/progs/engine_design/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2022\\BUILDT~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\aleks\\Documents\\progs\\engine_design -IC:\\Users\\aleks\\Documents\\progs\\engine_design\\core /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /W4 /permissive- /FoCMakeFiles\\Palpha_Diag.dir\\core\\Diag_Palpha\\Output_data\\Palpha_output.cpp.obj /FdCMakeFiles\\Palpha_Diag.dir\\ /FS -c C:\\Users\\aleks\\Documents\\progs\\engine_design\\core\\Diag_Palpha\\Output_data\\Palpha_output.cpp",
+  "file": "C:/Users/aleks/Documents/progs/engine_design/core/Diag_Palpha/Output_data/Palpha_output.cpp",
+  "output": "C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/Palpha_Diag.dir/core/Diag_Palpha/Output_data/Palpha_output.cpp.obj"
+}
+]
