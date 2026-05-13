@@ -648,3 +648,69 @@ bool EngineInputPanel::BuildCalculationModel(EngineModel& model, wxString& error
 
     return true;
 }
+
+void EngineInputPanel::SetFromModel(const EngineModel& model)
+{
+    if (!m_shaftCountSpin || !m_crankCountSpin || !m_cycleChoice || !m_cylindersPerCrankChoice)
+        return;
+
+    const int shaftCount = std::max(1, std::min(8, model.kinematic.shaftCount));
+    const int crankCount = std::max(1, std::min(16, model.kinematic.crankCountPerShaft));
+    const int cylindersPerCrank = std::max(1, std::min(12, model.kinematic.cylindersPerCrank));
+
+    m_shaftCountSpin->SetValue(shaftCount);
+    m_crankCountSpin->SetValue(crankCount);
+    m_cycleChoice->SetStringSelection(
+        (model.kinematic.cycleType == CycleType::TwoStroke) ? "2" : "4");
+    m_cylindersPerCrankChoice->SetStringSelection(wxString::Format("%d", cylindersPerCrank));
+
+    const bool articulated = model.kinematic.rodJointType == RodJointType::Articulated;
+    if (m_articulatedRadio)
+        m_articulatedRadio->SetValue(articulated);
+    if (m_sideBySideRadio)
+        m_sideBySideRadio->SetValue(!articulated);
+    SetArticulatedMode(articulated);
+
+    if (m_fullySupportedRadio)
+        m_fullySupportedRadio->SetValue(model.kinematic.supportType == SupportType::FullySupported);
+    if (m_semiSupportedRadio)
+        m_semiSupportedRadio->SetValue(model.kinematic.supportType == SupportType::SemiSupported);
+
+    if (m_articulatedRadiusCtrl)
+        m_articulatedRadiusCtrl->SetValue(wxString::Format("%.10g", model.kinematic.articulatedRodRadiusM));
+    if (m_articulatedLengthCtrl)
+        m_articulatedLengthCtrl->SetValue(wxString::Format("%.10g", model.kinematic.articulatedRodLengthM));
+
+    RebuildTables();
+
+    for (int row = 0; row < shaftCount; ++row)
+    {
+        if (row < static_cast<int>(model.shafts.size()))
+        {
+            const auto& shaft = model.shafts[static_cast<std::size_t>(row)];
+            m_shaftOriginGrid->SetCellValue(row, 0, wxString::Format("%.10g", shaft.originXMm));
+            m_shaftOriginGrid->SetCellValue(row, 1, wxString::Format("%.10g", shaft.originYMm));
+            m_shaftOriginGrid->SetCellValue(row, 2, wxString::Format("%.10g", shaft.originZMm));
+
+            for (int col = 0; col < crankCount; ++col)
+            {
+                double phase = 0.0;
+                if (col < static_cast<int>(shaft.cranks.size()))
+                    phase = shaft.cranks[static_cast<std::size_t>(col)].phaseDeg;
+                m_phaseGrid->SetCellValue(row, col, wxString::Format("%.10g", phase));
+            }
+
+            const int cylinderCountPerShaft = crankCount * cylindersPerCrank;
+            for (int col = 0; col < cylinderCountPerShaft; ++col)
+            {
+                double tilt = 0.0;
+                if (col < static_cast<int>(shaft.cylinders.size()))
+                    tilt = shaft.cylinders[static_cast<std::size_t>(col)].axisTiltDeg;
+                m_axisTiltGrid->SetCellValue(row, col, wxString::Format("%.10g", tilt));
+            }
+        }
+    }
+
+    m_alphaStepDeg = model.kinematic.alphaStepDeg;
+    NotifyDataChanged();
+}

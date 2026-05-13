@@ -1,14 +1,24 @@
 #include "core/balancing/balancing_synthesizer.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <iomanip>
 #include <map>
+#include <numeric>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <tuple>
 #include <utility>
 #include <vector>
+
+#if defined(_MSC_VER)
+#include <execution>
+#define ENGINE_BALANCING_HAS_STD_EXECUTION 1
+#else
+#define ENGINE_BALANCING_HAS_STD_EXECUTION 0
+#endif
 
 #include "core/balancing/balancing_equivalent_target.h"
 #include "core/balancing/balancing_pipeline.h"
@@ -55,6 +65,8 @@ struct PendingCandidate
     FastCandidateScore fastScore;
     std::string signature;
 };
+
+int CompareFastScores(const FastCandidateScore& a, const FastCandidateScore& b);
 
 Vec3 Add(const Vec3& a, const Vec3& b)
 {
@@ -121,8 +133,11 @@ std::vector<double> BuildRadiusGrid(double maxRadiusMm)
 {
     const double r = std::max(1.0, maxRadiusMm);
     return {
-        0.25 * r,
+        0.20 * r,
+        0.35 * r,
         0.50 * r,
+        0.65 * r,
+        0.80 * r,
         0.75 * r,
         1.00 * r
     };
@@ -132,9 +147,55 @@ std::vector<double> BuildLengthGrid(double maxLengthMm)
 {
     const double L = std::max(1.0, maxLengthMm);
     return {
+        0.40 * L,
+        0.70 * L,
         0.50 * L,
         1.00 * L
     };
+}
+
+std::vector<PendingCandidate> SelectTopPendingCandidates(
+    const std::map<std::string, PendingCandidate>& pendingCandidates,
+    const BalancingSynthesisConstraints& constraints)
+{
+    std::vector<PendingCandidate> selected;
+    selected.reserve(pendingCandidates.size());
+    for (const auto& [signature, pending] : pendingCandidates)
+    {
+        (void)signature;
+        selected.push_back(pending);
+    }
+
+    std::sort(selected.begin(),
+              selected.end(),
+              [](const PendingCandidate& a, const PendingCandidate& b)
+              {
+                  const int cmp = CompareFastScores(a.fastScore, b.fastScore);
+                  if (cmp != 0)
+                      return cmp < 0;
+
+                  if (a.scheme.balancerShaftCount != b.scheme.balancerShaftCount)
+                  {
+                      return a.scheme.balancerShaftCount < b.scheme.balancerShaftCount;
+                  }
+
+                  if (a.scheme.usesCrankCounterweights != b.scheme.usesCrankCounterweights)
+                  {
+                      return !a.scheme.usesCrankCounterweights && b.scheme.usesCrankCounterweights;
+                  }
+
+                  return a.scheme.name < b.scheme.name;
+              });
+
+    const int evalLimit = std::clamp(
+        constraints.maxVariantsToReturn * 32,
+        96,
+        640);
+
+    if (static_cast<int>(selected.size()) > evalLimit)
+        selected.resize(static_cast<std::size_t>(evalLimit));
+
+    return selected;
 }
 
 void AddError(BalancingSynthesisResult& result, const std::string& text)
@@ -589,7 +650,6 @@ BalancingSynthesisCandidateExplanation BuildExplanation(
 }
 
 std::string BuildDescription(const EngineModel& model,
-                             const BalancingSynthesisCandidateMetrics& m,
                              const CandidateDescriptor& descriptor,
                              const BalancingSynthesisCandidateExplanation& explanation)
 {
@@ -778,6 +838,23 @@ bool IsBetterPendingCandidate(const PendingCandidate& candidate,
         return !candidate.scheme.usesCrankCounterweights && currentBest.scheme.usesCrankCounterweights;
 
     return candidate.scheme.name < currentBest.scheme.name;
+}
+
+void MergePendingCandidateMap(std::map<std::string, PendingCandidate>& into,
+                              std::map<std::string, PendingCandidate>&& from)
+{
+    for (auto& kv : from)
+    {
+        auto it = into.find(kv.first);
+        if (it == into.end())
+        {
+            into.emplace(kv.first, std::move(kv.second));
+            continue;
+        }
+
+        if (IsBetterPendingCandidate(kv.second, it->second))
+            it->second = std::move(kv.second);
+    }
 }
 
 void KeepBestCandidate(BalancingSynthesisResult& result,
@@ -1058,13 +1135,96 @@ void CollectCandidate(std::map<std::string, PendingCandidate>& pendingCandidates
         it->second = std::move(pending);
 }
 
-void EvaluatePendingCandidate(BalancingSynthesisResult& synthesisResult,
-                              const PendingCandidate& pending,
-                              const engine::dynamic::DynamicResult& dynamicResult,
-                              const MassPropertiesInput& massInput,
-                              BalancingSynthesisGoalKind goal,
-                              const BalancingSynthesisConstraints& constraints,
-                              double crankRadiusMm)
+void RefineTopPendingNeighborhood(std::map<std::string, PendingCandidate>& pendingCandidates,
+                                  const EquivalentBalanceTarget& target,
+                                  BalancingSynthesisGoalKind goal,
+                                  double crankRadiusMm,
+                                  double rotatingMassKg,
+                                  const BalancingSynthesisConstraints& constraints)
+{
+    const int maxSeeds = std::clamp(constraints.maxVariantsToReturn * 6, 32, 96);
+
+    std::vector<const PendingCandidate*> sorted;
+    sorted.reserve(pendingCandidates.size());
+    for (const auto& kv : pendingCandidates)
+        sorted.push_back(&kv.second);
+
+    std::sort(sorted.begin(),
+              sorted.end(),
+              [](const PendingCandidate* a, const PendingCandidate* b)
+              {
+                  return CompareFastScores(a->fastScore, b->fastScore) < 0;
+              });
+
+    if (static_cast<int>(sorted.size()) > maxSeeds)
+        sorted.resize(static_cast<std::size_t>(maxSeeds));
+
+    static constexpr double kLengthScales[] = { 0.93, 0.97, 1.0, 1.03, 1.07 };
+    static constexpr double kRadiusScales[] = { 0.94, 1.0, 1.06 };
+
+    for (const PendingCandidate* seedPtr : sorted)
+    {
+        const PendingCandidate& seed = *seedPtr;
+
+        for (double lengthScale : kLengthScales)
+        {
+            for (double radiusScale : kRadiusScales)
+            {
+                if (std::abs(lengthScale - 1.0) < 1e-9 && std::abs(radiusScale - 1.0) < 1e-9)
+                    continue;
+
+                EngineModel model = seed.model;
+
+                if (model.balancing.crankCounterweights.enabled)
+                {
+                    const double oldCrankRadius = model.balancing.crankCounterweights.radiusMm;
+                    const double newCrankRadius = std::max(1.0, oldCrankRadius * radiusScale);
+                    model.balancing.crankCounterweights.radiusMm = newCrankRadius;
+
+                    if (rotatingMassKg > 0.0 && crankRadiusMm > 0.0)
+                    {
+                        model.balancing.crankCounterweights.massKg =
+                            ComputeCrankCounterweightMassKg(
+                                rotatingMassKg,
+                                crankRadiusMm,
+                                newCrankRadius,
+                                model.balancing.crankCounterweights.countMode);
+                    }
+                }
+
+                for (auto& shaft : model.balancing.balancerShafts)
+                {
+                    const double oldLength = std::max(1.0, shaft.lengthMm);
+                    const double oldRadius = std::max(1.0, shaft.counterweightRadiusMm);
+
+                    shaft.lengthMm = std::max(1.0, oldLength * lengthScale);
+                    shaft.counterweightRadiusMm = std::max(1.0, oldRadius * radiusScale);
+
+                    if (oldRadius > 1e-12)
+                        shaft.counterweightMassKg *= oldRadius / shaft.counterweightRadiusMm;
+
+                    const double lengthRatio = shaft.lengthMm / oldLength;
+                    for (auto& cw : shaft.counterweights)
+                        cw.positionAlongShaftMm *= lengthRatio;
+                }
+
+                CollectCandidate(pendingCandidates,
+                                   target,
+                                   model,
+                                   goal,
+                                   crankRadiusMm,
+                                   seed.scheme);
+            }
+        }
+    }
+}
+
+std::optional<BalancingSynthesisCandidate> TryEvaluatePendingCandidate(
+    const PendingCandidate& pending,
+    const engine::dynamic::DynamicResult& dynamicResult,
+    const MassPropertiesInput& massInput,
+    BalancingSynthesisGoalKind goal,
+    double crankRadiusMm)
 {
     BalancingInput input;
     input.alphaDeg = dynamicResult.alphaDeg;
@@ -1076,7 +1236,7 @@ void EvaluatePendingCandidate(BalancingSynthesisResult& synthesisResult,
     BalancingPipeline pipeline;
     BalancingPipelineResult pipelineResult = pipeline.Run(pending.model, dynamicResult, input);
     if (!pipelineResult.ok)
-        return;
+        return std::nullopt;
 
     BalancingSynthesisCandidate candidate;
     candidate.model = pending.model;
@@ -1091,9 +1251,193 @@ void EvaluatePendingCandidate(BalancingSynthesisResult& synthesisResult,
     candidate.score = CollapseRankedScore(descriptor.rankedScore);
     candidate.explanation = BuildExplanation(goal, pending.model, candidate.metrics, descriptor, candidate.score);
     candidate.title = BuildTitle(candidate.metrics, descriptor.rankedScore, candidate.score, pending.scheme, goal);
-    candidate.description = BuildDescription(pending.model, candidate.metrics, descriptor, candidate.explanation);
+    candidate.description = BuildDescription(pending.model, descriptor, candidate.explanation);
 
-    KeepBestCandidate(synthesisResult, std::move(candidate), constraints.maxVariantsToReturn);
+    return candidate;
+}
+
+void EvaluatePendingCandidate(BalancingSynthesisResult& synthesisResult,
+                              const PendingCandidate& pending,
+                              const engine::dynamic::DynamicResult& dynamicResult,
+                              const MassPropertiesInput& massInput,
+                              BalancingSynthesisGoalKind goal,
+                              const BalancingSynthesisConstraints& constraints,
+                              double crankRadiusMm)
+{
+    std::optional<BalancingSynthesisCandidate> candidate =
+        TryEvaluatePendingCandidate(pending, dynamicResult, massInput, goal, crankRadiusMm);
+
+    if (candidate.has_value())
+        KeepBestCandidate(synthesisResult, std::move(*candidate), constraints.maxVariantsToReturn);
+}
+
+struct AxisPlanePeakScores
+{
+    double peakInXY = 0.0;
+    double peakInXZ = 0.0;
+    double peakInYZ = 0.0;
+};
+
+AxisPlanePeakScores MergeMaxForcePlanes(const HarmonicBalanceTarget& a, const HarmonicBalanceTarget& b)
+{
+    return {
+        std::max(a.forceVectorPeakXY, b.forceVectorPeakXY),
+        std::max(a.forceVectorPeakXZ, b.forceVectorPeakXZ),
+        std::max(a.forceVectorPeakYZ, b.forceVectorPeakYZ),
+    };
+}
+
+AxisPlanePeakScores MergeMaxMomentPlanes(const HarmonicBalanceTarget& a, const HarmonicBalanceTarget& b)
+{
+    return {
+        std::max(a.momentVectorPeakXY, b.momentVectorPeakXY),
+        std::max(a.momentVectorPeakXZ, b.momentVectorPeakXZ),
+        std::max(a.momentVectorPeakYZ, b.momentVectorPeakYZ),
+    };
+}
+
+AxisPlanePeakScores SelectAxisPlanePeaksForGoal(BalancingSynthesisGoalKind goal,
+                                                const EquivalentBalanceTarget& eq)
+{
+    switch (goal)
+    {
+    case BalancingSynthesisGoalKind::InertiaForceFirstOrder:
+        return { eq.order1.forceVectorPeakXY,
+                 eq.order1.forceVectorPeakXZ,
+                 eq.order1.forceVectorPeakYZ };
+
+    case BalancingSynthesisGoalKind::InertiaForceSecondOrder:
+        return { eq.order2.forceVectorPeakXY,
+                 eq.order2.forceVectorPeakXZ,
+                 eq.order2.forceVectorPeakYZ };
+
+    case BalancingSynthesisGoalKind::InertiaMomentFirstOrder:
+        return { eq.order1.momentVectorPeakXY,
+                 eq.order1.momentVectorPeakXZ,
+                 eq.order1.momentVectorPeakYZ };
+
+    case BalancingSynthesisGoalKind::InertiaMomentSecondOrder:
+        return { eq.order2.momentVectorPeakXY,
+                 eq.order2.momentVectorPeakXZ,
+                 eq.order2.momentVectorPeakYZ };
+
+    case BalancingSynthesisGoalKind::InertiaForceTotal:
+    case BalancingSynthesisGoalKind::Combined:
+        return MergeMaxForcePlanes(eq.order1, eq.order2);
+
+    case BalancingSynthesisGoalKind::InertiaMomentTotal:
+        return MergeMaxMomentPlanes(eq.order1, eq.order2);
+
+    case BalancingSynthesisGoalKind::CentrifugalForce:
+    case BalancingSynthesisGoalKind::CentrifugalMoment:
+    default:
+        return MergeMaxForcePlanes(eq.order1, eq.order2);
+    }
+}
+
+std::vector<BalancerAxis> RankAxesFromPlaneScores(const AxisPlanePeakScores& p)
+{
+    std::array<std::pair<BalancerAxis, double>, 3> ranked = { {
+        { BalancerAxis::Z, p.peakInXY },
+        { BalancerAxis::Y, p.peakInXZ },
+        { BalancerAxis::X, p.peakInYZ },
+    } };
+
+    std::sort(ranked.begin(),
+              ranked.end(),
+              [](const std::pair<BalancerAxis, double>& a, const std::pair<BalancerAxis, double>& b)
+              {
+                  if (a.second != b.second)
+                      return a.second > b.second;
+
+                  if (a.first == BalancerAxis::Z)
+                      return true;
+                  if (b.first == BalancerAxis::Z)
+                      return false;
+                  if (a.first == BalancerAxis::Y)
+                      return true;
+                  if (b.first == BalancerAxis::Y)
+                      return false;
+                  return false;
+              });
+
+    return {
+        ranked[0].first,
+        ranked[1].first,
+        ranked[2].first
+    };
+}
+
+bool GoalUsesHarmonicPlaneAxisLock(BalancingSynthesisGoalKind goal)
+{
+    switch (goal)
+    {
+    case BalancingSynthesisGoalKind::InertiaForceFirstOrder:
+    case BalancingSynthesisGoalKind::InertiaForceSecondOrder:
+    case BalancingSynthesisGoalKind::InertiaForceTotal:
+    case BalancingSynthesisGoalKind::InertiaMomentFirstOrder:
+    case BalancingSynthesisGoalKind::InertiaMomentSecondOrder:
+    case BalancingSynthesisGoalKind::InertiaMomentTotal:
+    case BalancingSynthesisGoalKind::Combined:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+/// Ось Z → сила в плоскости XY; Y → XZ; X → YZ. Сначала — пики векторной гармоники по плоскостям.
+/// Если одна плоскость явно ведущая, оставляем только соответствующую ось; иначе при «ничьей»
+/// (типично колебание вдоль Y: плоскости XY и YZ одинаковы) для пары Z/X даём приоритет Z —
+/// в модели коленвал вдоль Z, основной балансир почти всегда соосен ему.
+std::vector<BalancerAxis> BuildSynthesisBalancerAxes(BalancingSynthesisGoalKind goal,
+                                                     const EquivalentBalanceTarget& eq)
+{
+    const AxisPlanePeakScores p = SelectAxisPlanePeaksForGoal(goal, eq);
+
+    if (!GoalUsesHarmonicPlaneAxisLock(goal))
+        return RankAxesFromPlaneScores(p);
+
+    constexpr double kDom = 0.90;
+
+    const bool zDom = p.peakInXY >= kDom * std::max(p.peakInXZ, p.peakInYZ);
+    const bool yDom = p.peakInXZ >= kDom * std::max(p.peakInXY, p.peakInYZ);
+    const bool xDom = p.peakInYZ >= kDom * std::max(p.peakInXY, p.peakInXZ);
+
+    const int domCount = (zDom ? 1 : 0) + (yDom ? 1 : 0) + (xDom ? 1 : 0);
+
+    if (domCount == 1)
+    {
+        if (zDom)
+            return { BalancerAxis::Z };
+        if (yDom)
+            return { BalancerAxis::Y };
+        return { BalancerAxis::X };
+    }
+
+    if (domCount == 2)
+    {
+        if (zDom && yDom)
+        {
+            return p.peakInXY >= p.peakInXZ ? std::vector<BalancerAxis>{ BalancerAxis::Z }
+                                            : std::vector<BalancerAxis>{ BalancerAxis::Y };
+        }
+
+        if (zDom && xDom)
+        {
+            if (p.peakInXY >= p.peakInYZ - 1e-12)
+                return { BalancerAxis::Z };
+            return { BalancerAxis::X };
+        }
+
+        if (yDom && xDom)
+        {
+            return p.peakInXZ >= p.peakInYZ ? std::vector<BalancerAxis>{ BalancerAxis::Y }
+                                            : std::vector<BalancerAxis>{ BalancerAxis::X };
+        }
+    }
+
+    return RankAxesFromPlaneScores(p);
 }
 
 void GenerateForScheme(std::map<std::string, PendingCandidate>& pendingCandidates,
@@ -1108,11 +1452,7 @@ void GenerateForScheme(std::map<std::string, PendingCandidate>& pendingCandidate
                        const std::vector<double>& radiusGrid,
                        const std::vector<double>& lengthGrid)
 {
-    const std::vector<BalancerAxis> axes = {
-        BalancerAxis::Z,
-        BalancerAxis::X,
-        BalancerAxis::Y
-    };
+    const std::vector<BalancerAxis> axes = BuildSynthesisBalancerAxes(goal, target);
 
     const double offsetBaseMm = std::max(1.0, crankRadiusMm);
     const int maxCounterweightsPerShaft = std::min(4, constraints.maxCounterweightsPerBalancerShaft);
@@ -1583,10 +1923,33 @@ BalancingSynthesisResult BalancingSynthesizer::Generate(
     std::map<std::string, PendingCandidate> pendingCandidates;
     const auto schemes = BuildSchemeLibrary(goal, constraints);
 
-    for (const auto& scheme : schemes)
+    std::vector<std::map<std::string, PendingCandidate>> perSchemeMaps(schemes.size());
+
+#if ENGINE_BALANCING_HAS_STD_EXECUTION
+    std::vector<std::size_t> schemeIndices(schemes.size());
+    std::iota(schemeIndices.begin(), schemeIndices.end(), 0);
+    std::for_each(std::execution::par,
+                  schemeIndices.begin(),
+                  schemeIndices.end(),
+                  [&](std::size_t index)
+                  {
+                      GenerateForScheme(perSchemeMaps[index],
+                                        schemes[index],
+                                        sourceModel,
+                                        baselineModel,
+                                        target,
+                                        goal,
+                                        constraints,
+                                        crankRadiusMm,
+                                        rotatingMassKg,
+                                        radiusGrid,
+                                        lengthGrid);
+                  });
+#else
+    for (std::size_t index = 0; index < schemes.size(); ++index)
     {
-        GenerateForScheme(pendingCandidates,
-                          scheme,
+        GenerateForScheme(perSchemeMaps[index],
+                          schemes[index],
                           sourceModel,
                           baselineModel,
                           target,
@@ -1597,18 +1960,61 @@ BalancingSynthesisResult BalancingSynthesizer::Generate(
                           radiusGrid,
                           lengthGrid);
     }
+#endif
 
-    for (const auto& [signature, pending] : pendingCandidates)
+    for (auto& oneSchemeMap : perSchemeMaps)
+        MergePendingCandidateMap(pendingCandidates, std::move(oneSchemeMap));
+
+    RefineTopPendingNeighborhood(
+        pendingCandidates, target, goal, crankRadiusMm, rotatingMassKg, constraints);
+
+    const std::vector<PendingCandidate> selectedCandidates =
+        SelectTopPendingCandidates(pendingCandidates, constraints);
+
+    std::vector<BalancingSynthesisCandidate> evaluated;
+    evaluated.reserve(selectedCandidates.size());
+
+#if ENGINE_BALANCING_HAS_STD_EXECUTION
+    std::vector<std::optional<BalancingSynthesisCandidate>> evalSlots(selectedCandidates.size());
+    std::vector<std::size_t> evalIndices(selectedCandidates.size());
+    std::iota(evalIndices.begin(), evalIndices.end(), 0);
+    std::for_each(std::execution::par,
+                  evalIndices.begin(),
+                  evalIndices.end(),
+                  [&](std::size_t i)
+                  {
+                      evalSlots[i] = TryEvaluatePendingCandidate(selectedCandidates[i],
+                                                                 dynamicResult,
+                                                                 massInput,
+                                                                 goal,
+                                                                 crankRadiusMm);
+                  });
+    for (auto& slot : evalSlots)
     {
-        (void)signature;
-        EvaluatePendingCandidate(result,
-                                 pending,
-                                 dynamicResult,
-                                 massInput,
-                                 goal,
-                                 constraints,
-                                 crankRadiusMm);
+        if (slot.has_value())
+            evaluated.push_back(std::move(*slot));
     }
+#else
+    for (const auto& pending : selectedCandidates)
+    {
+        std::optional<BalancingSynthesisCandidate> c =
+            TryEvaluatePendingCandidate(pending, dynamicResult, massInput, goal, crankRadiusMm);
+        if (c.has_value())
+            evaluated.push_back(std::move(*c));
+    }
+#endif
+
+    std::sort(evaluated.begin(),
+              evaluated.end(),
+              [](const BalancingSynthesisCandidate& a, const BalancingSynthesisCandidate& b)
+              {
+                  return a.score < b.score;
+              });
+
+    if (static_cast<int>(evaluated.size()) > constraints.maxVariantsToReturn)
+        evaluated.resize(static_cast<std::size_t>(constraints.maxVariantsToReturn));
+
+    result.candidates = std::move(evaluated);
 
     if (result.candidates.empty())
     {
@@ -1618,7 +2024,9 @@ BalancingSynthesisResult BalancingSynthesizer::Generate(
     }
 
     AddWarning(result,
-               "Автоподбор теперь действительно двухэтапный: сначала формируются и канонизируются кандидаты, по каждой сигнатуре остаётся лучший fast-score, и только потом выполняется точный pipeline.");
+               "Автоподбор: параллельно по схемам строится пул кандидатов, для лучших по fast-score добавляется "
+               "локальное уточнение длины/радиуса, затем ограниченный top-пул оценивается полным pipeline "
+               "(при сборке MSVC — параллельно по кандидатам). Итог ранжируется по score.");
 
     if (constraints.maxCounterweightsPerBalancerShaft >= 3)
     {

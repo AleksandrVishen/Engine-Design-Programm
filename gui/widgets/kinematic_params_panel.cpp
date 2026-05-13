@@ -79,6 +79,26 @@ bool KinematicParamsPanel::FillModel(EngineModel& model, bool strict, wxString& 
     return true;
 }
 
+void KinematicParamsPanel::SetFromModel(const EngineModel& model)
+{
+    if (m_rpmCtrl)
+        m_rpmCtrl->SetValue(wxString::Format("%.10g", model.kinematic.rpm));
+    if (m_deaxialCtrl)
+        m_deaxialCtrl->SetValue(wxString::Format("%.10g", model.kinematic.deaxialMm));
+    if (m_radiusCtrl)
+        m_radiusCtrl->SetValue(wxString::Format("%.10g", model.kinematic.crankRadiusM));
+    if (m_lambdaCtrl)
+        m_lambdaCtrl->SetValue(wxString::Format("%.10g", model.kinematic.lambda));
+    if (m_mainJournalLengthCtrl)
+        m_mainJournalLengthCtrl->SetValue(wxString::Format("%.10g", model.kinematic.mainJournalLengthM));
+    if (m_rodJournalLengthCtrl)
+        m_rodJournalLengthCtrl->SetValue(wxString::Format("%.10g", model.kinematic.rodJournalLengthM));
+    if (m_webThicknessCtrl)
+        m_webThicknessCtrl->SetValue(wxString::Format("%.10g", model.kinematic.webThicknessM));
+
+    NotifyDataChanged();
+}
+
 void KinematicParamsPanel::BuildUi()
 {
     SetBackgroundColour(wxColour(12, 18, 28));

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <wx/bitmap.h>
 #include <wx/panel.h>
 
 #include "core/kinematic/kinematic_result.h"
@@ -26,7 +27,8 @@ private:
                     double alphaMin, double alphaMax,
                     double valueMin, double valueMax);
     void DrawCurrentAlphaMarker(wxDC& dc, const wxRect& plotRect,
-                                double alphaMin, double alphaMax);
+                                double alphaMin, double alphaMax,
+                                double valueMin, double valueMax);
     void DrawEmptyState(wxDC& dc, const wxRect& rect);
 
     bool HasData() const;
@@ -34,10 +36,20 @@ private:
     const std::vector<double>* GetSeriesValues(const engine::kinematic::CylinderKinematicSeries& cylinder) const;
     wxString GetMetricLabel() const;
 
-private:
+    void InvalidatePlotCache();
+    void EnsurePlotCache(const wxRect& plotRect,
+                         double alphaMin,
+                         double alphaMax,
+                         double valueMin,
+                         double valueMax);
+
     engine::kinematic::KinematicResult m_result;
     KinematicMetric m_metric = KinematicMetric::Displacement;
     std::size_t m_currentAlphaIndex = 0;
+
+    wxBitmap m_plotCache;
+    bool m_plotCacheValid = false;
+    wxRect m_plotCacheArea{0, 0, 0, 0};
 
     wxDECLARE_EVENT_TABLE();
 };

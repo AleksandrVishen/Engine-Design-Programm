@@ -20,6 +20,7 @@ public:
 
     bool BuildPreviewModel(EngineModel& model) const;
     bool BuildCalculationModel(EngineModel& model, wxString& errorText) const;
+    void SetFromModel(const EngineModel& model);
 
     void SetAlphaStep(double alphaStepDeg);
     double GetAlphaStep() const;

@@ -22,7 +22,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{76C008D1-389C-3647-A278-B6D6A2242007}</ProjectGuid>
+    <ProjectGuid>{F1E0EA42-CC08-34E0-BECE-C3F6F6331D6A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <VcpkgEnabled>false</VcpkgEnabled>
     <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
@@ -60,38 +60,38 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\aleks\Documents\progs\engine_design\build\Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">engine_gui.dir\Debug\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">engine_gui</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
-    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/aleks/Documents/progs/engine_design</LocalDebuggerWorkingDirectory>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\aleks\Documents\progs\engine_design\build\Release\</OutDir>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/aleks/Documents/progs/Engine-Design-Programm</LocalDebuggerWorkingDirectory>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">engine_gui.dir\Release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">engine_gui</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
-    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/aleks/Documents/progs/engine_design</LocalDebuggerWorkingDirectory>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\aleks\Documents\progs\engine_design\build\MinSizeRel\</OutDir>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/aleks/Documents/progs/Engine-Design-Programm</LocalDebuggerWorkingDirectory>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\MinSizeRel\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">engine_gui.dir\MinSizeRel\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">engine_gui</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
-    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:/Users/aleks/Documents/progs/engine_design</LocalDebuggerWorkingDirectory>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\aleks\Documents\progs\engine_design\build\RelWithDebInfo\</OutDir>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:/Users/aleks/Documents/progs/Engine-Design-Programm</LocalDebuggerWorkingDirectory>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\RelWithDebInfo\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">engine_gui.dir\RelWithDebInfo\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">engine_gui</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
-    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:/Users/aleks/Documents/progs/engine_design</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:/Users/aleks/Documents/progs/Engine-Design-Programm</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\engine_design;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\Engine-Design-Programm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/lib/mswu" /external:I "C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/include" /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -110,7 +110,6 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <SupportJustMyCode></SupportJustMyCode>
       <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
@@ -121,10 +120,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;UNICODE;_UNICODE;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\engine_design;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\Engine-Design-Programm;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\engine_design;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\Engine-Design-Programm;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -134,7 +133,7 @@
     <PostBuildEvent>
       <Message></Message>
       <Command>setlocal
-C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary C:/Users/aleks/Documents/progs/engine_design/build/Debug/engine_gui.exe -installedDir C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/debug/bin -OutVariable out
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/Debug/engine_gui.exe -installedDir C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/debug/bin -OutVariable out
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -144,16 +143,16 @@ exit /b %1
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\debug\lib\wxmsw33ud_core.lib;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\debug\lib\wxbase33ud.lib;kernel32.lib;user32.lib;gdi32.lib;gdiplus.lib;msimg32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;ws2_32.lib;wininet.lib;oleacc.lib;uxtheme.lib;wsock32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\debug\lib\wxmsw33ud_core.lib;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\debug\lib\wxbase33ud.lib;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\debug\lib\wxmsw33ud_html.lib;kernel32.lib;user32.lib;gdi32.lib;gdiplus.lib;msimg32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;ws2_32.lib;wininet.lib;oleacc.lib;uxtheme.lib;wsock32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <DataExecutionPrevention></DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
-      <ImportLibrary>C:/Users/aleks/Documents/progs/engine_design/build/Debug/engine_gui.lib</ImportLibrary>
+      <ImportLibrary>C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/Debug/engine_gui.lib</ImportLibrary>
       <LinkErrorReporting></LinkErrorReporting>
-      <ProgramDataBaseFile>C:/Users/aleks/Documents/progs/engine_design/build/Debug/engine_gui.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/Debug/engine_gui.pdb</ProgramDataBaseFile>
       <RandomizedBaseAddress></RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
     </Link>
@@ -163,7 +162,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\engine_design;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\Engine-Design-Programm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/lib/mswu" /external:I "C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/include" /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -181,7 +180,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <SupportJustMyCode></SupportJustMyCode>
       <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
@@ -194,10 +192,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\engine_design;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\Engine-Design-Programm;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\engine_design;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\Engine-Design-Programm;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -207,7 +205,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <PostBuildEvent>
       <Message></Message>
       <Command>setlocal
-C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary C:/Users/aleks/Documents/progs/engine_design/build/Release/engine_gui.exe -installedDir C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/bin -OutVariable out
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/Release/engine_gui.exe -installedDir C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/bin -OutVariable out
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -217,16 +215,16 @@ exit /b %1
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxmsw33u_core.lib;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxbase33u.lib;kernel32.lib;user32.lib;gdi32.lib;gdiplus.lib;msimg32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;ws2_32.lib;wininet.lib;oleacc.lib;uxtheme.lib;wsock32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxmsw33u_core.lib;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxbase33u.lib;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxmsw33u_html.lib;kernel32.lib;user32.lib;gdi32.lib;gdiplus.lib;msimg32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;ws2_32.lib;wininet.lib;oleacc.lib;uxtheme.lib;wsock32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <DataExecutionPrevention></DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
-      <ImportLibrary>C:/Users/aleks/Documents/progs/engine_design/build/Release/engine_gui.lib</ImportLibrary>
+      <ImportLibrary>C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/Release/engine_gui.lib</ImportLibrary>
       <LinkErrorReporting></LinkErrorReporting>
-      <ProgramDataBaseFile>C:/Users/aleks/Documents/progs/engine_design/build/Release/engine_gui.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/Release/engine_gui.pdb</ProgramDataBaseFile>
       <RandomizedBaseAddress></RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
     </Link>
@@ -236,7 +234,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\engine_design;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\Engine-Design-Programm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/lib/mswu" /external:I "C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/include" /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -254,7 +252,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <SupportJustMyCode></SupportJustMyCode>
       <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
@@ -267,10 +264,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\engine_design;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\Engine-Design-Programm;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\engine_design;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\Engine-Design-Programm;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -280,7 +277,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <PostBuildEvent>
       <Message></Message>
       <Command>setlocal
-C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary C:/Users/aleks/Documents/progs/engine_design/build/MinSizeRel/engine_gui.exe -installedDir C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/bin -OutVariable out
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/MinSizeRel/engine_gui.exe -installedDir C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/bin -OutVariable out
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -290,16 +287,16 @@ exit /b %1
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxmsw33u_core.lib;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxbase33u.lib;kernel32.lib;user32.lib;gdi32.lib;gdiplus.lib;msimg32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;ws2_32.lib;wininet.lib;oleacc.lib;uxtheme.lib;wsock32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxmsw33u_core.lib;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxbase33u.lib;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxmsw33u_html.lib;kernel32.lib;user32.lib;gdi32.lib;gdiplus.lib;msimg32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;ws2_32.lib;wininet.lib;oleacc.lib;uxtheme.lib;wsock32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <DataExecutionPrevention></DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
-      <ImportLibrary>C:/Users/aleks/Documents/progs/engine_design/build/MinSizeRel/engine_gui.lib</ImportLibrary>
+      <ImportLibrary>C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/MinSizeRel/engine_gui.lib</ImportLibrary>
       <LinkErrorReporting></LinkErrorReporting>
-      <ProgramDataBaseFile>C:/Users/aleks/Documents/progs/engine_design/build/MinSizeRel/engine_gui.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/MinSizeRel/engine_gui.pdb</ProgramDataBaseFile>
       <RandomizedBaseAddress></RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
     </Link>
@@ -309,7 +306,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\engine_design;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\Engine-Design-Programm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/lib/mswu" /external:I "C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/include" /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -328,7 +325,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <SupportJustMyCode></SupportJustMyCode>
       <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
@@ -339,10 +335,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\engine_design;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\Engine-Design-Programm;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\engine_design;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\aleks\Documents\progs\Engine-Design-Programm;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\mswu;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -352,7 +348,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <PostBuildEvent>
       <Message></Message>
       <Command>setlocal
-C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary C:/Users/aleks/Documents/progs/engine_design/build/RelWithDebInfo/engine_gui.exe -installedDir C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/bin -OutVariable out
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/RelWithDebInfo/engine_gui.exe -installedDir C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/installed/x64-windows/bin -OutVariable out
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -362,16 +358,16 @@ exit /b %1
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxmsw33u_core.lib;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxbase33u.lib;kernel32.lib;user32.lib;gdi32.lib;gdiplus.lib;msimg32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;ws2_32.lib;wininet.lib;oleacc.lib;uxtheme.lib;wsock32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxmsw33u_core.lib;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxbase33u.lib;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\lib\wxmsw33u_html.lib;kernel32.lib;user32.lib;gdi32.lib;gdiplus.lib;msimg32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;ws2_32.lib;wininet.lib;oleacc.lib;uxtheme.lib;wsock32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <DataExecutionPrevention></DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
-      <ImportLibrary>C:/Users/aleks/Documents/progs/engine_design/build/RelWithDebInfo/engine_gui.lib</ImportLibrary>
+      <ImportLibrary>C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/RelWithDebInfo/engine_gui.lib</ImportLibrary>
       <LinkErrorReporting></LinkErrorReporting>
-      <ProgramDataBaseFile>C:/Users/aleks/Documents/progs/engine_design/build/RelWithDebInfo/engine_gui.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/RelWithDebInfo/engine_gui.pdb</ProgramDataBaseFile>
       <RandomizedBaseAddress></RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
     </Link>
@@ -380,11 +376,11 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\aleks\Documents\progs\engine_design\CMakeLists.txt">
+    <CustomBuild Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/aleks/Documents/progs/engine_design/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/aleks/Documents/progs/Engine-Design-Programm/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/aleks/Documents/progs/engine_design -BC:/Users/aleks/Documents/progs/engine_design/build --check-stamp-file C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/aleks/Documents/progs/Engine-Design-Programm -BC:/Users/aleks/Documents/progs/Engine-Design-Programm/build --check-stamp-file C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -392,12 +388,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\share\wxwidgets\vcpkg-cmake-wrapper.cmake;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\scripts\buildsystems\vcpkg.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindwxWidgets.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\UsewxWidgets.cmake;C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\4.2.0\CMakeCXXCompiler.cmake;C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\4.2.0\CMakeRCCompiler.cmake;C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\4.2.0\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\share\wxwidgets\vcpkg-cmake-wrapper.cmake;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\scripts\buildsystems\vcpkg.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindwxWidgets.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\UsewxWidgets.cmake;C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\4.2.0\CMakeCXXCompiler.cmake;C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\4.2.0\CMakeRCCompiler.cmake;C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\4.2.0\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/aleks/Documents/progs/engine_design/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/aleks/Documents/progs/Engine-Design-Programm/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/aleks/Documents/progs/engine_design -BC:/Users/aleks/Documents/progs/engine_design/build --check-stamp-file C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/aleks/Documents/progs/Engine-Design-Programm -BC:/Users/aleks/Documents/progs/Engine-Design-Programm/build --check-stamp-file C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -405,12 +401,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\share\wxwidgets\vcpkg-cmake-wrapper.cmake;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\scripts\buildsystems\vcpkg.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindwxWidgets.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\UsewxWidgets.cmake;C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\4.2.0\CMakeCXXCompiler.cmake;C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\4.2.0\CMakeRCCompiler.cmake;C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\4.2.0\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\share\wxwidgets\vcpkg-cmake-wrapper.cmake;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\scripts\buildsystems\vcpkg.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindwxWidgets.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\UsewxWidgets.cmake;C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\4.2.0\CMakeCXXCompiler.cmake;C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\4.2.0\CMakeRCCompiler.cmake;C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\4.2.0\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/aleks/Documents/progs/engine_design/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/aleks/Documents/progs/Engine-Design-Programm/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/aleks/Documents/progs/engine_design -BC:/Users/aleks/Documents/progs/engine_design/build --check-stamp-file C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/aleks/Documents/progs/Engine-Design-Programm -BC:/Users/aleks/Documents/progs/Engine-Design-Programm/build --check-stamp-file C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -418,12 +414,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\share\wxwidgets\vcpkg-cmake-wrapper.cmake;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\scripts\buildsystems\vcpkg.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindwxWidgets.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\UsewxWidgets.cmake;C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\4.2.0\CMakeCXXCompiler.cmake;C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\4.2.0\CMakeRCCompiler.cmake;C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\4.2.0\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\share\wxwidgets\vcpkg-cmake-wrapper.cmake;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\scripts\buildsystems\vcpkg.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindwxWidgets.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\UsewxWidgets.cmake;C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\4.2.0\CMakeCXXCompiler.cmake;C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\4.2.0\CMakeRCCompiler.cmake;C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\4.2.0\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/aleks/Documents/progs/engine_design/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/aleks/Documents/progs/Engine-Design-Programm/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/aleks/Documents/progs/engine_design -BC:/Users/aleks/Documents/progs/engine_design/build --check-stamp-file C:/Users/aleks/Documents/progs/engine_design/build/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/aleks/Documents/progs/Engine-Design-Programm -BC:/Users/aleks/Documents/progs/Engine-Design-Programm/build --check-stamp-file C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -431,112 +427,114 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\share\wxwidgets\vcpkg-cmake-wrapper.cmake;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\scripts\buildsystems\vcpkg.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindwxWidgets.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\UsewxWidgets.cmake;C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\4.2.0\CMakeCXXCompiler.cmake;C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\4.2.0\CMakeRCCompiler.cmake;C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\4.2.0\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\aleks\Documents\progs\engine_design\build\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\installed\x64-windows\share\wxwidgets\vcpkg-cmake-wrapper.cmake;C:\Developing_Applications_and_libs\vcpkg_git\vcpkg\scripts\buildsystems\vcpkg.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindwxWidgets.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\UsewxWidgets.cmake;C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\4.2.0\CMakeCXXCompiler.cmake;C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\4.2.0\CMakeRCCompiler.cmake;C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\4.2.0\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\app\main.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\core\model\engine_validation.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\core\kinematic\kinematic_model_builder.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\core\kinematic\kinematic_solver.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\core\dynamic\dynamic_input_factory.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\core\dynamic\dynamic_calculator.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_model_builder.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_calculator.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_composer.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_pipeline.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_input_factory.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_scheme_library.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_equivalent_target.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\frame\main_frame.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\frame\main_menu_builder.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\pages\input_page.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\pages\kinematic_result_page.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\pages\mass_properties_page.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\pages\dynamic_result_page.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\pages\counterweight_setup_page.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\pages\balancing_result_page.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\navigation_panel.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\engine_input_panel.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\engine_scheme_panel.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\kinematic_params_panel.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\kinematic_chart_panel.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\kinematic_legend_panel.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\kinematic_table_panel.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\dynamic_chart_panel.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\dynamic_table_panel.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\dynamic_legend_panel.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\counterweight_input_panel.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\balancing_chart_panel.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\balancing_table_panel.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\dialogs\settings_dialog.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\dialogs\help_dialog.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\gui\dialogs\window_size_dialog.cpp" />
-    <ClCompile Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_synthesizer.cpp" />
-    <ResourceCompile Include="C:\Users\aleks\Documents\progs\engine_design\app_icon.rc" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\model\engine_types.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\model\engine_model.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\model\balancing_model.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\model\mass_properties_input.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\model\engine_validation.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\kinematic\normalized_kinematic_model.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\kinematic\kinematic_model_builder.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\kinematic\kinematic_result.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\kinematic\kinematic_solver.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\dynamic\dynamic_input.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\dynamic\dynamic_input_factory.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\dynamic\dynamic_result.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\dynamic\dynamic_calculator.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\normalized_balancing_model.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_input.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_input_factory.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_result.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_model_builder.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_calculator.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_composed_result.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_composer.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_pipeline.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_scheme_library.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_equivalent_target.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\common\text_utf8.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\frame\main_frame.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\frame\main_menu_builder.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\pages\input_page.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\pages\kinematic_result_page.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\pages\mass_properties_page.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\pages\dynamic_result_page.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\pages\counterweight_setup_page.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\pages\balancing_result_page.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\navigation_panel.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\engine_input_panel.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\engine_scheme_panel.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\kinematic_params_panel.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\kinematic_chart_panel.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\kinematic_legend_panel.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\kinematic_metric.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\kinematic_table_panel.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\dynamic_metric.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\dynamic_component.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\dynamic_chart_panel.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\dynamic_table_panel.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\dynamic_legend_panel.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\counterweight_input_panel.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\balancing_metric.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\balancing_component.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\balancing_chart_panel.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\widgets\balancing_table_panel.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\dialogs\settings_dialog.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\dialogs\help_dialog.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\gui\dialogs\window_size_dialog.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_synthesizer.h" />
-    <ClInclude Include="C:\Users\aleks\Documents\progs\engine_design\core\balancing\balancing_synthesis.h" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\app\main.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\model\engine_validation.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\kinematic\kinematic_model_builder.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\kinematic\kinematic_solver.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\dynamic\dynamic_input_factory.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\dynamic\dynamic_calculator.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_model_builder.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_calculator.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_composer.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_pipeline.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_input_factory.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_scheme_library.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_equivalent_target.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\frame\main_frame.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\frame\main_menu_builder.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\pages\input_page.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\pages\kinematic_result_page.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\pages\mass_properties_page.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\pages\dynamic_result_page.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\pages\counterweight_setup_page.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\pages\balancing_result_page.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\navigation_panel.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\engine_input_panel.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\engine_scheme_panel.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\kinematic_params_panel.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\kinematic_chart_panel.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\kinematic_legend_panel.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\kinematic_table_panel.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\dynamic_chart_panel.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\dynamic_table_panel.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\dynamic_legend_panel.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\counterweight_input_panel.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\balancing_chart_panel.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\balancing_table_panel.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\dialogs\settings_dialog.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\dialogs\help_dialog.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\dialogs\report_dialog.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\report\report_builder.cpp" />
+    <ClCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_synthesizer.cpp" />
+    <ResourceCompile Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\app_icon.rc" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\model\engine_types.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\model\engine_model.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\model\balancing_model.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\model\mass_properties_input.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\model\engine_validation.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\kinematic\normalized_kinematic_model.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\kinematic\kinematic_model_builder.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\kinematic\kinematic_result.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\kinematic\kinematic_solver.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\dynamic\dynamic_input.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\dynamic\dynamic_input_factory.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\dynamic\dynamic_result.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\dynamic\dynamic_calculator.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\normalized_balancing_model.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_input.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_input_factory.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_result.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_model_builder.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_calculator.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_composed_result.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_composer.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_pipeline.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_scheme_library.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_equivalent_target.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\common\text_utf8.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\frame\main_frame.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\frame\main_menu_builder.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\pages\input_page.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\pages\kinematic_result_page.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\pages\mass_properties_page.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\pages\dynamic_result_page.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\pages\counterweight_setup_page.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\pages\balancing_result_page.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\navigation_panel.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\engine_input_panel.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\engine_scheme_panel.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\kinematic_params_panel.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\kinematic_chart_panel.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\kinematic_legend_panel.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\kinematic_metric.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\kinematic_table_panel.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\dynamic_metric.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\dynamic_component.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\dynamic_chart_panel.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\dynamic_table_panel.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\dynamic_legend_panel.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\counterweight_input_panel.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\balancing_metric.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\balancing_component.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\balancing_chart_panel.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\widgets\balancing_table_panel.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\dialogs\settings_dialog.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\dialogs\help_dialog.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\dialogs\report_dialog.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\gui\report\report_builder.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_synthesizer.h" />
+    <ClInclude Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\core\balancing\balancing_synthesis.h" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="C:\Users\aleks\Documents\progs\engine_design\build\ZERO_CHECK.vcxproj">
-      <Project>{9BD05294-A451-35C0-B86B-C36390505660}</Project>
+    <ProjectReference Include="C:\Users\aleks\Documents\progs\Engine-Design-Programm\build\ZERO_CHECK.vcxproj">
+      <Project>{77CF3792-9AA7-3EB4-9413-FC4C75D58A5D}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

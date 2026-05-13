@@ -1,5 +1,7 @@
 #include "gui/dialogs/settings_dialog.h"
 
+#include <cmath>
+
 #include <wx/button.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
@@ -21,17 +23,26 @@ void SettingsDialog::BuildUi(double currentAlphaStep)
     root->Add(new wxStaticText(this, wxID_ANY, WXU8("Шаг угла alpha, град:")), 0, wxALL, 10);
 
     wxArrayString items;
-    items.Add("1.0");
     items.Add("0.5");
-    items.Add("0.25");
-    items.Add("0.1");
+    items.Add("1.0");
+    items.Add("5.0");
+    items.Add("10.0");
+    items.Add("45.0");
 
     m_alphaStepChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, items);
 
-    int selection = 0;
-    if (currentAlphaStep == 0.5) selection = 1;
-    else if (currentAlphaStep == 0.25) selection = 2;
-    else if (currentAlphaStep == 0.1) selection = 3;
+    static constexpr double kSteps[] = {0.5, 1.0, 5.0, 10.0, 45.0};
+    int selection = 1;
+    double bestDiff = 1e100;
+    for (int i = 0; i < static_cast<int>(sizeof(kSteps) / sizeof(kSteps[0])); ++i)
+    {
+        const double d = std::fabs(currentAlphaStep - kSteps[static_cast<std::size_t>(i)]);
+        if (d < bestDiff)
+        {
+            bestDiff = d;
+            selection = i;
+        }
+    }
 
     m_alphaStepChoice->SetSelection(selection);
 

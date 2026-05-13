@@ -5,6 +5,7 @@
 #include <limits>
 
 #include <wx/dcbuffer.h>
+#include <wx/dcmemory.h>
 #include "gui/common/text_utf8.h"
 
 wxBEGIN_EVENT_TABLE(BalancingChartPanel, wxPanel)
@@ -24,6 +25,7 @@ void BalancingChartPanel::SetResult(const engine::balancing::BalancingComposedRe
 {
     m_result = result;
     m_currentAlphaIndex = 0;
+    InvalidatePlotCache();
     Refresh();
 }
 
@@ -33,6 +35,7 @@ void BalancingChartPanel::SetMetric(BalancingMetric metric)
         return;
 
     m_metric = metric;
+    InvalidatePlotCache();
     Refresh();
 }
 
@@ -42,6 +45,7 @@ void BalancingChartPanel::SetViewMode(BalancingViewMode viewMode)
         return;
 
     m_viewMode = viewMode;
+    InvalidatePlotCache();
     Refresh();
 }
 
@@ -51,6 +55,7 @@ void BalancingChartPanel::SetComponent(BalancingComponent component)
         return;
 
     m_component = component;
+    InvalidatePlotCache();
     Refresh();
 }
 
@@ -63,7 +68,11 @@ void BalancingChartPanel::SetCurrentAlphaIndex(std::size_t index)
         return;
     }
 
-    m_currentAlphaIndex = std::min(index, m_result.alphaDeg.size() - 1);
+    const std::size_t clamped = std::min(index, m_result.alphaDeg.size() - 1);
+    if (m_currentAlphaIndex == clamped)
+        return;
+
+    m_currentAlphaIndex = clamped;
     Refresh();
 }
 
@@ -291,13 +300,67 @@ void BalancingChartPanel::OnPaint(wxPaintEvent&)
         std::max(10, rect.width - 95),
         std::max(10, rect.height - 70));
 
-    DrawAxes(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
-    DrawSeries(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
-    DrawCurrentAlphaMarker(dc, plotRect, alphaMin, alphaMax);
+    EnsurePlotCache(plotRect, alphaMin, alphaMax, valueMin, valueMax);
+    if (m_plotCacheValid && m_plotCache.IsOk())
+        dc.DrawBitmap(m_plotCache, m_plotCacheArea.GetTopLeft(), false);
+    else
+    {
+        DrawAxes(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+        DrawSeries(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+    }
+
+    DrawCurrentAlphaMarker(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+}
+
+void BalancingChartPanel::InvalidatePlotCache()
+{
+    m_plotCacheValid = false;
+}
+
+void BalancingChartPanel::EnsurePlotCache(
+    const wxRect& plotRect,
+    double alphaMin,
+    double alphaMax,
+    double valueMin,
+    double valueMax)
+{
+    const wxRect cacheRect(
+        plotRect.x - 70,
+        plotRect.y - 28,
+        plotRect.width + 70 + 45,
+        plotRect.height + 28 + 56);
+
+    if (m_plotCacheValid && m_plotCache.IsOk() && m_plotCacheArea == cacheRect)
+        return;
+
+    if (cacheRect.width < 2 || cacheRect.height < 2)
+        return;
+
+    wxBitmap bmp(cacheRect.width, cacheRect.height, 24);
+    if (!bmp.IsOk())
+        return;
+
+    wxMemoryDC mdc;
+    mdc.SelectObject(bmp);
+    mdc.SetBackground(wxBrush(wxColour(20, 26, 38)));
+    mdc.Clear();
+    mdc.SetFont(GetFont());
+    mdc.SetDeviceOrigin(-cacheRect.x, -cacheRect.y);
+
+    DrawAxes(mdc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+    DrawSeries(mdc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+
+    mdc.SetDeviceOrigin(0, 0);
+    mdc.SelectObject(wxNullBitmap);
+
+    m_plotCache = bmp;
+    m_plotCacheArea = cacheRect;
+    m_plotCacheValid = true;
 }
 
 void BalancingChartPanel::OnSize(wxSizeEvent& event)
 {
+    InvalidatePlotCache();
     Refresh();
     event.Skip();
 }
@@ -412,21 +475,45 @@ void BalancingChartPanel::DrawSeries(wxDC& dc,
 void BalancingChartPanel::DrawCurrentAlphaMarker(wxDC& dc,
                                                  const wxRect& plotRect,
                                                  double alphaMin,
-                                                 double alphaMax)
+                                                 double alphaMax,
+                                                 double valueMin,
+                                                 double valueMax)
 {
     if (m_result.alphaDeg.empty())
         return;
 
-    const double alpha = m_result.alphaDeg[std::min(m_currentAlphaIndex, m_result.alphaDeg.size() - 1)];
+    const std::size_t index = std::min(m_currentAlphaIndex, m_result.alphaDeg.size() - 1);
+    const double alpha = m_result.alphaDeg[index];
 
     if (std::abs(alphaMax - alphaMin) < 1e-12)
         return;
 
-    const int x = plotRect.GetLeft() +
-                  static_cast<int>((alpha - alphaMin) * plotRect.GetWidth() / (alphaMax - alphaMin));
+    const auto* values = GetSelectedSeriesValues();
+    if (!values || index >= values->size() || values->size() != m_result.alphaDeg.size())
+        return;
 
-    dc.SetPen(wxPen(wxColour(255, 210, 90), 1));
-    dc.DrawLine(x, plotRect.GetTop(), x, plotRect.GetBottom());
+    auto mapX = [&](double a) -> int
+    {
+        return plotRect.GetLeft() +
+               static_cast<int>((a - alphaMin) * plotRect.GetWidth() / (alphaMax - alphaMin));
+    };
+
+    auto mapY = [&](double value) -> int
+    {
+        if (std::abs(valueMax - valueMin) < 1e-12)
+            return plotRect.GetBottom();
+
+        return plotRect.GetBottom() -
+               static_cast<int>((value - valueMin) * plotRect.GetHeight() / (valueMax - valueMin));
+    };
+
+    constexpr int dotR = 5;
+    const int px = mapX(alpha);
+    const int py = mapY(ExtractComponent((*values)[index]));
+
+    dc.SetPen(wxPen(wxColour(255, 255, 255), 2));
+    dc.SetBrush(wxBrush(wxColour(255, 210, 90)));
+    dc.DrawEllipse(px - dotR, py - dotR, 2 * dotR, 2 * dotR);
 }
 
 void BalancingChartPanel::DrawEmptyState(wxDC& dc, const wxRect& rect)

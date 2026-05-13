@@ -14,6 +14,7 @@ public:
     explicit KinematicParamsPanel(wxWindow* parent);
 
     bool FillModel(EngineModel& model, bool strict, wxString& errorText) const;
+    void SetFromModel(const EngineModel& model);
 
     void SetOnDataChanged(std::function<void()> handler);
     void SetOnCalculate(std::function<void()> handler);
@@ -25,7 +26,6 @@ private:
 
     bool ReadDouble(wxTextCtrl* ctrl, double& value, bool strict, const wxString& fieldName, wxString& errorText) const;
 
-private:
     wxTextCtrl* m_rpmCtrl = nullptr;
     wxTextCtrl* m_deaxialCtrl = nullptr;
     wxTextCtrl* m_radiusCtrl = nullptr;

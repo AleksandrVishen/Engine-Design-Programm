@@ -1,6 +1,7 @@
 #include "gui/pages/mass_properties_page.h"
 
 #include <wx/button.h>
+#include <wx/event.h>
 #include <wx/grid.h>
 #include <wx/msgdlg.h>
 #include <wx/sizer.h>
@@ -41,6 +42,11 @@ void MassPropertiesPage::SetOnCalculateRequested(std::function<void(const MassPr
     m_onCalculateRequested = std::move(handler);
 }
 
+void MassPropertiesPage::SetOnInputChanged(std::function<void()> handler)
+{
+    m_onInputChanged = std::move(handler);
+}
+
 MassPropertiesInput MassPropertiesPage::GetInput() const
 {
     MassPropertiesInput input;
@@ -53,6 +59,27 @@ MassPropertiesInput MassPropertiesPage::GetInput() const
     input.referenceZmm = ReadGridDouble(0, 2, 0.0);
 
     return input;
+}
+
+void MassPropertiesPage::SetInput(const MassPropertiesInput& input)
+{
+    if (m_cylinderDiameterCtrl)
+        m_cylinderDiameterCtrl->SetValue(wxString::Format("%.10g", input.cylinderDiameterMm));
+    if (m_reciprocatingMassCtrl)
+        m_reciprocatingMassCtrl->SetValue(wxString::Format("%.10g", input.reciprocatingMassKg));
+    if (m_rotatingMassCtrl)
+        m_rotatingMassCtrl->SetValue(wxString::Format("%.10g", input.rotatingMassKg));
+
+    if (m_referenceGrid &&
+        m_referenceGrid->GetNumberRows() > 0 &&
+        m_referenceGrid->GetNumberCols() >= 3)
+    {
+        m_referenceGrid->SetCellValue(0, 0, wxString::Format("%.10g", input.referenceXmm));
+        m_referenceGrid->SetCellValue(0, 1, wxString::Format("%.10g", input.referenceYmm));
+        m_referenceGrid->SetCellValue(0, 2, wxString::Format("%.10g", input.referenceZmm));
+    }
+
+    UpdateSchemeReferencePoint();
 }
 
 void MassPropertiesPage::BuildUi()
@@ -221,11 +248,15 @@ void MassPropertiesPage::OnAnyInputChanged(wxCommandEvent& event)
 {
     wxUnusedVar(event);
     UpdateSchemeReferencePoint();
+    if (m_onInputChanged)
+        m_onInputChanged();
 }
 
 void MassPropertiesPage::OnGridCellChanged(wxGridEvent& event)
 {
     UpdateSchemeReferencePoint();
+    if (m_onInputChanged)
+        m_onInputChanged();
     event.Skip();
 }
 
@@ -243,6 +274,12 @@ void MassPropertiesPage::OnCalculate(wxCommandEvent& event)
                  WXU8("Ошибка"),
                  wxOK | wxICON_WARNING,
                  this);
+}
+
+void MassPropertiesPage::RunDynamicCalculation()
+{
+    wxCommandEvent dummy(wxEVT_BUTTON);
+    OnCalculate(dummy);
 }
 
 double MassPropertiesPage::ReadTextCtrlDouble(wxTextCtrl* ctrl, double fallback) const

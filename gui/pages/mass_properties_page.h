@@ -18,8 +18,12 @@ public:
 
     void SetModel(const EngineModel& model);
     MassPropertiesInput GetInput() const;
+    void SetInput(const MassPropertiesInput& input);
 
     void SetOnCalculateRequested(std::function<void(const MassPropertiesInput&)> handler);
+    void SetOnInputChanged(std::function<void()> handler);
+
+    void RunDynamicCalculation();
 
 private:
     void BuildUi();
@@ -44,4 +48,5 @@ private:
     wxButton* m_calculateButton = nullptr;
 
     std::function<void(const MassPropertiesInput&)> m_onCalculateRequested;
+    std::function<void()> m_onInputChanged;
 };

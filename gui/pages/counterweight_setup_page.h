@@ -26,6 +26,9 @@ public:
             const EngineModel&,
             engine::balancing::BalancingSynthesisGoalKind)> handler);
 
+    void RunPipelineCalculate();
+    void RunAutobalance();
+
 private:
     void BuildUi();
     void BindEvents();

@@ -1,5 +1,6 @@
 #include "core/kinematic/kinematic_solver.h"
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
 #include <utility>
@@ -78,6 +79,18 @@ struct MainMechanismInstant
     double mainAxisCoordinate = 0.0;
 };
 
+struct SliderCrankAnalyticalInstant
+{
+    double displacementM = 0.0;
+    double velocityMps = 0.0;
+    double accelerationMps2 = 0.0;
+    double accelerationFirstOrderMps2 = 0.0;
+    double accelerationSecondOrderMps2 = 0.0;
+    double rodAngleRad = 0.0;
+    double rodAngularVelocityRadS = 0.0;
+    double rodAngularAccelerationRadS2 = 0.0;
+};
+
 struct SeriesBuffers
 {
     std::vector<double> axisCoordinates;
@@ -112,6 +125,85 @@ double MmToM(double mm)
 double RpmToOmega(double rpm)
 {
     return 2.0 * kPi * rpm / 60.0;
+}
+
+bool IsCenteredMainRodAnalyticalCase(
+    double crankRadiusM,
+    double rodLengthM,
+    double deaxialMm)
+{
+    constexpr double kDeaxialEpsM = 1e-9;
+
+    if (crankRadiusM <= 0.0 || rodLengthM <= 0.0)
+        return false;
+
+    const double lambda = crankRadiusM / rodLengthM;
+    if (lambda <= 0.0 || lambda >= 1.0)
+        return false;
+
+    return std::abs(MmToM(deaxialMm)) <= kDeaxialEpsM;
+}
+
+SliderCrankAnalyticalInstant ComputeCenteredSliderCrankAnalyticalInstant(
+    double alphaDeg,
+    double phaseDeg,
+    double axisTiltDeg,
+    double crankRadiusM,
+    double rodLengthM,
+    double rpm)
+{
+    SliderCrankAnalyticalInstant instant;
+
+    if (crankRadiusM <= 0.0 || rodLengthM <= 0.0)
+        return instant;
+
+    const double lambda = crankRadiusM / rodLengthM;
+    if (lambda <= 0.0 || lambda >= 1.0)
+        return instant;
+
+    constexpr double kEps = 1e-12;
+    const double theta = DegToRad(alphaDeg + phaseDeg - axisTiltDeg);
+    const double omega = RpmToOmega(rpm);
+    const double omega2 = omega * omega;
+
+    const double sinTheta = std::sin(theta);
+    const double cosTheta = std::cos(theta);
+    const double sin2Theta = std::sin(2.0 * theta);
+    const double cos2Theta = std::cos(2.0 * theta);
+
+    instant.displacementM = crankRadiusM *
+        ((1.0 - cosTheta) + (lambda * 0.25) * (1.0 - cos2Theta));
+    instant.velocityMps = crankRadiusM * omega *
+        (sinTheta + 0.5 * lambda * sin2Theta);
+    instant.accelerationFirstOrderMps2 = crankRadiusM * omega2 * cosTheta;
+    instant.accelerationSecondOrderMps2 = crankRadiusM * omega2 * lambda * cos2Theta;
+    instant.accelerationMps2 =
+        instant.accelerationFirstOrderMps2 + instant.accelerationSecondOrderMps2;
+
+    const double asinArg = std::clamp(lambda * sinTheta, -1.0, 1.0);
+    const double denom2 = std::max(kEps, 1.0 - asinArg * asinArg);
+    const double denom = std::sqrt(denom2);
+    const double denom32 = denom2 * denom;
+
+    instant.rodAngleRad = std::asin(asinArg);
+    instant.rodAngularVelocityRadS = omega * lambda * cosTheta / denom;
+    instant.rodAngularAccelerationRadS2 = omega2 *
+        ((-lambda * sinTheta * (1.0 - lambda * lambda * sinTheta * sinTheta)) +
+         (lambda * lambda * lambda * sinTheta * cosTheta * cosTheta)) / denom32;
+
+    if (!std::isfinite(instant.displacementM) ||
+        !std::isfinite(instant.velocityMps) ||
+        !std::isfinite(instant.accelerationMps2) ||
+        !std::isfinite(instant.accelerationFirstOrderMps2) ||
+        !std::isfinite(instant.accelerationSecondOrderMps2) ||
+        !std::isfinite(instant.rodAngleRad) ||
+        !std::isfinite(instant.rodAngularVelocityRadS) ||
+        !std::isfinite(instant.rodAngularAccelerationRadS2))
+    {
+        return SliderCrankAnalyticalInstant{};
+    }
+
+    return instant;
 }
 
 double NormalizeAngleDiff(double angle)
@@ -673,33 +765,6 @@ HarmonicDecomposition DecomposeAccelerationIntoFirstSecondOrder(
     return result;
 }
 
-void FillMainAnalyticalFirstSecondOrder(
-    const std::vector<double>& alphaDeg,
-    double phaseDeg,
-    double crankRadiusM,
-    double mainRodLengthM,
-    double rpm,
-    std::vector<double>& firstOrder,
-    std::vector<double>& secondOrder)
-{
-    firstOrder.assign(alphaDeg.size(), 0.0);
-    secondOrder.assign(alphaDeg.size(), 0.0);
-
-    if (alphaDeg.empty() || crankRadiusM <= 0.0 || mainRodLengthM <= 0.0)
-        return;
-
-    const double omega = RpmToOmega(rpm);
-    const double omega2 = omega * omega;
-    const double lambda = crankRadiusM / mainRodLengthM;
-
-    for (std::size_t i = 0; i < alphaDeg.size(); ++i)
-    {
-        const double theta = DegToRad(alphaDeg[i] + phaseDeg);
-        firstOrder[i] = crankRadiusM * omega2 * std::cos(theta);
-        secondOrder[i] = crankRadiusM * omega2 * lambda * std::cos(2.0 * theta);
-    }
-}
-
 SeriesBuffers ComputeMainSeries(
     const std::vector<double>& alphaDeg,
     double phaseDeg,
@@ -727,152 +792,203 @@ SeriesBuffers ComputeMainSeries(
     buffers.crankPinPointGlobalM.reserve(alphaDeg.size());
     buffers.crankRadiusVectorGlobalM.reserve(alphaDeg.size());
 
-    double sAxisMax = -std::numeric_limits<double>::infinity();
+    const bool useAnalyticalPath = IsCenteredMainRodAnalyticalCase(
+        mainCrankRadiusM,
+        mainRodLengthM,
+        deaxialMm);
 
-    for (double alpha : alphaDeg)
+    if (useAnalyticalPath)
     {
-        const double sAxis = ComputeMainAxisCoordinate(
-            alpha,
-            phaseDeg,
-            mainCrankRadiusM,
-            mainRodLengthM,
-            mainAxisTiltDeg,
-            deaxialMm);
+        for (double alpha : alphaDeg)
+        {
+            const auto instant = ComputeCenteredSliderCrankAnalyticalInstant(
+                alpha,
+                phaseDeg,
+                mainAxisTiltDeg,
+                mainCrankRadiusM,
+                mainRodLengthM,
+                rpm);
 
-        buffers.axisCoordinates.push_back(sAxis);
-        if (sAxis > sAxisMax)
-            sAxisMax = sAxis;
-    }
+            const Vec2 crankPin = ComputeCrankPinPoint(
+                alpha,
+                phaseDeg,
+                mainCrankRadiusM);
 
-    for (std::size_t i = 0; i < alphaDeg.size(); ++i)
-    {
-        const double alpha = alphaDeg[i];
-        const double s = sAxisMax - buffers.axisCoordinates[i];
+            const double axisCoordinate =
+                mainRodLengthM + mainCrankRadiusM - instant.displacementM;
+            const Vec2 pistonPin = ComputePistonPinPointFromAxisCoordinate(
+                axisCoordinate,
+                mainAxisTiltDeg,
+                deaxialMm);
 
-        const Vec2 crankPin = ComputeCrankPinPoint(
-            alpha,
-            phaseDeg,
-            mainCrankRadiusM);
+            // Analytical centered slider-crank kinematics provides scalar motion along
+            // the local cylinder axis. The cylinder axis tilt gamma is still applied when
+            // placing piston, crank and force-line points in the global coordinate system.
+            buffers.axisCoordinates.push_back(axisCoordinate);
+            buffers.displacements.push_back(instant.displacementM);
+            buffers.velocities.push_back(instant.velocityMps);
+            buffers.accelerations.push_back(instant.accelerationMps2);
+            buffers.accelerationsFirstOrder.push_back(instant.accelerationFirstOrderMps2);
+            buffers.accelerationsSecondOrder.push_back(instant.accelerationSecondOrderMps2);
+            buffers.rodAngles.push_back(instant.rodAngleRad);
+            buffers.rodAngularVelocities.push_back(instant.rodAngularVelocityRadS);
+            buffers.rodAngularAccelerations.push_back(instant.rodAngularAccelerationRadS2);
 
-        const Vec2 pistonPin = ComputePistonPinPointFromAxisCoordinate(
-            buffers.axisCoordinates[i],
-            mainAxisTiltDeg,
-            deaxialMm);
-
-        buffers.forceLinePointGlobalM.push_back({
-            pistonPin.x,
-            pistonPin.y,
-            crankPinCenterZ_M
-        });
-
-        buffers.crankPinPointGlobalM.push_back({
-            crankPin.x,
-            crankPin.y,
-            crankPinCenterZ_M
-        });
-
-        buffers.crankRadiusVectorGlobalM.push_back({
-            crankPin.x,
-            crankPin.y,
-            0.0
-        });
-
-        const double v = ComputeVelocityFromAxisCoordinate(
-            false,
-            alpha,
-            phaseDeg,
-            mainCrankRadiusM,
-            mainRodLengthM,
-            mainAxisTiltDeg,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            deaxialMm,
-            rpm);
-
-        const double a = ComputeAccelerationFromAxisCoordinate(
-            false,
-            alpha,
-            phaseDeg,
-            mainCrankRadiusM,
-            mainRodLengthM,
-            mainAxisTiltDeg,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            deaxialMm,
-            rpm);
-
-        const double phi = ComputeRodAngle(
-            false,
-            alpha,
-            phaseDeg,
-            mainCrankRadiusM,
-            mainRodLengthM,
-            mainAxisTiltDeg,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            deaxialMm);
-
-        const double wRod = ComputeRodAngularVelocity(
-            false,
-            alpha,
-            phaseDeg,
-            mainCrankRadiusM,
-            mainRodLengthM,
-            mainAxisTiltDeg,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            deaxialMm,
-            rpm);
-
-        const double eRod = ComputeRodAngularAcceleration(
-            false,
-            alpha,
-            phaseDeg,
-            mainCrankRadiusM,
-            mainRodLengthM,
-            mainAxisTiltDeg,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            deaxialMm,
-            rpm);
-
-        buffers.displacements.push_back(s);
-        buffers.velocities.push_back(v);
-        buffers.accelerations.push_back(a);
-
-        buffers.rodAngles.push_back(phi);
-        buffers.rodAngularVelocities.push_back(wRod);
-        buffers.rodAngularAccelerations.push_back(eRod);
-    }
-
-    if (std::abs(deaxialMm) < 1e-12)
-    {
-        FillMainAnalyticalFirstSecondOrder(
-            alphaDeg,
-            phaseDeg,
-            mainCrankRadiusM,
-            mainRodLengthM,
-            rpm,
-            buffers.accelerationsFirstOrder,
-            buffers.accelerationsSecondOrder);
+            buffers.forceLinePointGlobalM.push_back({
+                pistonPin.x,
+                pistonPin.y,
+                crankPinCenterZ_M
+            });
+            buffers.crankPinPointGlobalM.push_back({
+                crankPin.x,
+                crankPin.y,
+                crankPinCenterZ_M
+            });
+            buffers.crankRadiusVectorGlobalM.push_back({
+                crankPin.x,
+                crankPin.y,
+                0.0
+            });
+        }
     }
     else
     {
+        // Geometric fallback path.
+        // The piston position is obtained from the existing geometric constraint
+        // solution. Velocity, acceleration and rod angular derivatives in this path
+        // are still finite-difference based and therefore should not be labeled as
+        // fully analytical kinematics.
+        double sAxisMax = -std::numeric_limits<double>::infinity();
+
+        for (double alpha : alphaDeg)
+        {
+            const double sAxis = ComputeMainAxisCoordinate(
+                alpha,
+                phaseDeg,
+                mainCrankRadiusM,
+                mainRodLengthM,
+                mainAxisTiltDeg,
+                deaxialMm);
+
+            buffers.axisCoordinates.push_back(sAxis);
+            if (sAxis > sAxisMax)
+                sAxisMax = sAxis;
+        }
+
+        for (std::size_t i = 0; i < alphaDeg.size(); ++i)
+        {
+            const double alpha = alphaDeg[i];
+            const double s = sAxisMax - buffers.axisCoordinates[i];
+
+            const Vec2 crankPin = ComputeCrankPinPoint(
+                alpha,
+                phaseDeg,
+                mainCrankRadiusM);
+
+            const Vec2 pistonPin = ComputePistonPinPointFromAxisCoordinate(
+                buffers.axisCoordinates[i],
+                mainAxisTiltDeg,
+                deaxialMm);
+
+            buffers.forceLinePointGlobalM.push_back({
+                pistonPin.x,
+                pistonPin.y,
+                crankPinCenterZ_M
+            });
+
+            buffers.crankPinPointGlobalM.push_back({
+                crankPin.x,
+                crankPin.y,
+                crankPinCenterZ_M
+            });
+
+            buffers.crankRadiusVectorGlobalM.push_back({
+                crankPin.x,
+                crankPin.y,
+                0.0
+            });
+
+            const double v = ComputeVelocityFromAxisCoordinate(
+                false,
+                alpha,
+                phaseDeg,
+                mainCrankRadiusM,
+                mainRodLengthM,
+                mainAxisTiltDeg,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                deaxialMm,
+                rpm);
+
+            const double a = ComputeAccelerationFromAxisCoordinate(
+                false,
+                alpha,
+                phaseDeg,
+                mainCrankRadiusM,
+                mainRodLengthM,
+                mainAxisTiltDeg,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                deaxialMm,
+                rpm);
+
+            const double phi = ComputeRodAngle(
+                false,
+                alpha,
+                phaseDeg,
+                mainCrankRadiusM,
+                mainRodLengthM,
+                mainAxisTiltDeg,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                deaxialMm);
+
+            const double wRod = ComputeRodAngularVelocity(
+                false,
+                alpha,
+                phaseDeg,
+                mainCrankRadiusM,
+                mainRodLengthM,
+                mainAxisTiltDeg,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                deaxialMm,
+                rpm);
+
+            const double eRod = ComputeRodAngularAcceleration(
+                false,
+                alpha,
+                phaseDeg,
+                mainCrankRadiusM,
+                mainRodLengthM,
+                mainAxisTiltDeg,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                deaxialMm,
+                rpm);
+
+            buffers.displacements.push_back(s);
+            buffers.velocities.push_back(v);
+            buffers.accelerations.push_back(a);
+            buffers.rodAngles.push_back(phi);
+            buffers.rodAngularVelocities.push_back(wRod);
+            buffers.rodAngularAccelerations.push_back(eRod);
+        }
+
         const auto harmonic = DecomposeAccelerationIntoFirstSecondOrder(
             alphaDeg,
             phaseDeg,
             buffers.accelerations);
-
         buffers.accelerationsFirstOrder = harmonic.firstOrder;
         buffers.accelerationsSecondOrder = harmonic.secondOrder;
     }

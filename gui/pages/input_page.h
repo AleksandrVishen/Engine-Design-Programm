@@ -16,9 +16,14 @@ public:
 
     void SetAlphaStep(double alphaStepDeg);
     double GetAlphaStep() const;
+    bool BuildCurrentModel(EngineModel& model, wxString& errorText) const;
+    void SetFromModel(const EngineModel& model);
 
     void SetOnCalculationSucceeded(
         std::function<void(const EngineModel&, const engine::kinematic::KinematicResult&)> handler);
+    void SetOnInputChanged(std::function<void()> handler);
+
+    void RunKinematicCalculation();
 
 private:
     void BuildUi();
@@ -35,4 +40,5 @@ private:
     KinematicParamsPanel* m_kinematicParamsPanel = nullptr;
 
     std::function<void(const EngineModel&, const engine::kinematic::KinematicResult&)> m_onCalculationSucceeded;
+    std::function<void()> m_onInputChanged;
 };

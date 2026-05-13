@@ -1,7 +1,9 @@
 #pragma once
 
 #include <optional>
+#include <string>
 #include <wx/frame.h>
+#include <wx/event.h>
 
 #include "core/balancing/balancing_pipeline.h"
 #include "core/dynamic/dynamic_result.h"
@@ -21,7 +23,7 @@ class BalancingResultPage;
 class MainFrame : public wxFrame
 {
 public:
-    MainFrame();
+    explicit MainFrame(const wxString& startupProjectPath = wxString());
 
 private:
     void BuildUi();
@@ -34,14 +36,31 @@ private:
     void ShowCounterweightSetupPage();
     void ShowBalancingResultPage();
 
-    void OnFileStub(wxCommandEvent& event);
+    void OnOpenProject(wxCommandEvent& event);
+    void OnSaveProject(wxCommandEvent& event);
+    void OnSaveProjectAs(wxCommandEvent& event);
     void OnOpenSettings(wxCommandEvent& event);
-    void OnOpenWindowSizeSettings(wxCommandEvent& event);
+    void OnOpenReport(wxCommandEvent& event);
     void OnOpenHelp(wxCommandEvent& event);
+    void OnCloseWindow(wxCloseEvent& event);
 
     void ApplySafeWindowBounds(const wxSize& desiredSize);
+    bool SaveProjectToPath(const wxString& path);
+    bool SaveProjectAs();
+    bool LoadProjectFromPath(const wxString& path);
+    bool BuildCurrentEngineModelForSave(EngineModel& model);
+    void MarkProjectDirty();
+    void MarkProjectClean();
+    void UpdateWindowTitle();
+    bool ConfirmDiscardUnsavedChanges();
+    void PersistLastProjectPath(const wxString& path);
+    void TryLoadLastProjectAtStartup();
+    wxString GetLastProjectPointerFilePath() const;
 
-private:
+    void OnCharHook(wxKeyEvent& event);
+    void NavigateToPreviousNavPage();
+    static bool IsMultilineTextInput(wxWindow* focus);
+
     NavigationPanel* m_navigationPanel = nullptr;
     wxSimplebook* m_book = nullptr;
     InputPage* m_inputPage = nullptr;
@@ -58,4 +77,8 @@ private:
     std::optional<MassPropertiesInput> m_lastMassPropertiesInput;
     std::optional<engine::dynamic::DynamicResult> m_lastDynamicResult;
     std::optional<engine::balancing::BalancingPipelineResult> m_lastBalancingPipelineResult;
+    std::optional<std::string> m_currentProjectPathUtf8;
+    bool m_isProjectDirty = false;
+    bool m_isLoadingProject = false;
+    wxString m_startupProjectPath;
 };

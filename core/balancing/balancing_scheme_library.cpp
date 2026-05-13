@@ -81,11 +81,11 @@ std::vector<CounterweightPattern> BuildCounterweightPatterns(int counterweightCo
         };
 
     case 2:
+        // Только пары через 180°: одинаковая фаза (PairInline) давала «два по 90°» и не согласовывала
+        // гармонику с силой 1ω/2ω; 90°/270° эквивалентно противоположным массам в плоскости вращения.
         return {
             { CounterweightPatternKind::PairOpposed, "PairOpposed_X", { 0.25, 0.75 }, { 0.0, 180.0 } },
             { CounterweightPatternKind::PairOpposed, "PairOpposed_Y", { 0.25, 0.75 }, { 90.0, 270.0 } },
-            { CounterweightPatternKind::PairInline, "PairInline_X", { 0.25, 0.75 }, { 0.0, 0.0 } },
-            { CounterweightPatternKind::PairInline, "PairInline_Y", { 0.25, 0.75 }, { 90.0, 90.0 } }
         };
 
     case 3:

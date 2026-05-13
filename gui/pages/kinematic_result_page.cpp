@@ -368,6 +368,24 @@ void KinematicResultPage::SetCurrentAlphaIndex(std::size_t index)
 
     m_currentAlphaIndex = std::min(index, m_result.alphaDeg.size() - 1);
 
+    // During playback: skip wxGrid updates (expensive); refresh chart so the marker follows curves.
+    if (m_isPlaying)
+    {
+        if (m_schemePanel)
+            m_schemePanel->SetAnimationAlphaDeg(m_result.alphaDeg[m_currentAlphaIndex]);
+
+        if (m_chartPanel)
+            m_chartPanel->SetCurrentAlphaIndex(m_currentAlphaIndex);
+
+        if (m_alphaSlider && static_cast<std::size_t>(m_alphaSlider->GetValue()) != m_currentAlphaIndex)
+            m_alphaSlider->SetValue(static_cast<int>(m_currentAlphaIndex));
+
+        const double alpha = m_result.alphaDeg[m_currentAlphaIndex];
+        if (m_currentAlphaText)
+            m_currentAlphaText->SetLabel(wxString::Format(WXU8("Текущий α: %.1f°"), alpha));
+        return;
+    }
+
     if (m_chartPanel)
         m_chartPanel->SetCurrentAlphaIndex(m_currentAlphaIndex);
 
@@ -409,5 +427,14 @@ void KinematicResultPage::StopAnimation()
         m_animationTimer.Stop();
 
     m_isPlaying = false;
+
+    if (!m_result.alphaDeg.empty())
+    {
+        if (m_chartPanel)
+            m_chartPanel->SetCurrentAlphaIndex(m_currentAlphaIndex);
+        if (m_tablePanel)
+            m_tablePanel->SetCurrentAlphaIndex(m_currentAlphaIndex);
+    }
+
     UpdateAnimationUi();
 }

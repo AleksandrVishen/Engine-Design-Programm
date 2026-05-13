@@ -5,6 +5,7 @@
 #include <limits>
 
 #include <wx/dcbuffer.h>
+#include <wx/dcmemory.h>
 
 #include "gui/common/text_utf8.h"
 
@@ -55,6 +56,7 @@ void KinematicChartPanel::SetResult(const engine::kinematic::KinematicResult& re
 {
     m_result = result;
     m_currentAlphaIndex = 0;
+    InvalidatePlotCache();
     Refresh();
 }
 
@@ -64,6 +66,7 @@ void KinematicChartPanel::SetMetric(KinematicMetric metric)
         return;
 
     m_metric = metric;
+    InvalidatePlotCache();
     Refresh();
 }
 
@@ -255,13 +258,67 @@ void KinematicChartPanel::OnPaint(wxPaintEvent&)
         std::max(10, rect.width - leftMargin - rightMargin),
         std::max(10, rect.height - topMargin - bottomMargin));
 
-    DrawAxes(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
-    DrawSeries(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
-    DrawCurrentAlphaMarker(dc, plotRect, alphaMin, alphaMax);
+    EnsurePlotCache(plotRect, alphaMin, alphaMax, valueMin, valueMax);
+    if (m_plotCacheValid && m_plotCache.IsOk())
+        dc.DrawBitmap(m_plotCache, m_plotCacheArea.GetTopLeft(), false);
+    else
+    {
+        DrawAxes(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+        DrawSeries(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+    }
+
+    DrawCurrentAlphaMarker(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+}
+
+void KinematicChartPanel::InvalidatePlotCache()
+{
+    m_plotCacheValid = false;
+}
+
+void KinematicChartPanel::EnsurePlotCache(
+    const wxRect& plotRect,
+    double alphaMin,
+    double alphaMax,
+    double valueMin,
+    double valueMax)
+{
+    const wxRect cacheRect(
+        plotRect.x - 72,
+        plotRect.y - 22,
+        plotRect.width + 72 + 28,
+        plotRect.height + 22 + 56);
+
+    if (m_plotCacheValid && m_plotCache.IsOk() && m_plotCacheArea == cacheRect)
+        return;
+
+    if (cacheRect.width < 2 || cacheRect.height < 2)
+        return;
+
+    wxBitmap bmp(cacheRect.width, cacheRect.height, 24);
+    if (!bmp.IsOk())
+        return;
+
+    wxMemoryDC mdc;
+    mdc.SelectObject(bmp);
+    mdc.SetBackground(wxBrush(wxColour(18, 24, 36)));
+    mdc.Clear();
+    mdc.SetFont(GetFont());
+    mdc.SetDeviceOrigin(-cacheRect.x, -cacheRect.y);
+
+    DrawAxes(mdc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+    DrawSeries(mdc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+
+    mdc.SetDeviceOrigin(0, 0);
+    mdc.SelectObject(wxNullBitmap);
+
+    m_plotCache = bmp;
+    m_plotCacheArea = cacheRect;
+    m_plotCacheValid = true;
 }
 
 void KinematicChartPanel::OnSize(wxSizeEvent& event)
 {
+    InvalidatePlotCache();
     Refresh();
     event.Skip();
 }
@@ -375,21 +432,44 @@ void KinematicChartPanel::DrawCurrentAlphaMarker(
     wxDC& dc,
     const wxRect& plotRect,
     double alphaMin,
-    double alphaMax)
+    double alphaMax,
+    double valueMin,
+    double valueMax)
 {
     if (m_result.alphaDeg.empty())
         return;
 
     const std::size_t index = std::min(m_currentAlphaIndex, m_result.alphaDeg.size() - 1);
     const double alpha = m_result.alphaDeg[index];
-    const double tx = SafeNormalize(alpha, alphaMin, alphaMax);
-    const int x = plotRect.x + static_cast<int>(tx * plotRect.width);
 
-    dc.SetPen(wxPen(wxColour(255, 255, 255), 1, wxPENSTYLE_SHORT_DASH));
-    dc.DrawLine(x, plotRect.y, x, plotRect.y + plotRect.height);
+    constexpr int dotR = 5;
+    auto drawDot = [&](int px, int py, const wxColour& fill)
+    {
+        dc.SetPen(wxPen(wxColour(255, 255, 255), 2));
+        dc.SetBrush(wxBrush(fill));
+        dc.DrawEllipse(px - dotR, py - dotR, 2 * dotR, 2 * dotR);
+    };
+
+    for (std::size_t cylinderIndex = 0; cylinderIndex < m_result.cylinders.size(); ++cylinderIndex)
+    {
+        const auto& cylinder = m_result.cylinders[cylinderIndex];
+        const auto* values = GetSeriesValues(cylinder);
+
+        if (values == nullptr || values->size() != m_result.alphaDeg.size() || index >= values->size())
+            continue;
+
+        const double value = (*values)[index];
+        const double tx = SafeNormalize(alpha, alphaMin, alphaMax);
+        const double ty = SafeNormalize(value, valueMin, valueMax);
+
+        const int x = plotRect.x + static_cast<int>(tx * plotRect.width);
+        const int y = plotRect.y + plotRect.height - static_cast<int>(ty * plotRect.height);
+
+        drawDot(x, y, GetSeriesColour(cylinderIndex));
+    }
 
     dc.SetTextForeground(wxColour(255, 255, 255));
-    dc.DrawText(wxString::Format(WXU8("α=%.1f"), alpha), x + 6, plotRect.y + 6);
+    dc.DrawText(wxString::Format(WXU8("α=%.1f"), alpha), plotRect.x + 6, plotRect.y + 6);
 }
 
 void KinematicChartPanel::DrawEmptyState(wxDC& dc, const wxRect& rect)

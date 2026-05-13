@@ -17,10 +17,31 @@ struct HarmonicBalanceTarget
     double forceEquivalentProductKgMm = 0.0;
     double forceDominantPhaseDeg = 0.0;
 
+    /// Амплитуда гармоники порядка `order` для проекций вектора силы на X/Y/Z (Н), из DFT по углу коленвала.
+    double forceHarmonicAmpX = 0.0;
+    double forceHarmonicAmpY = 0.0;
+    double forceHarmonicAmpZ = 0.0;
+
     double momentAmplitudeNm = 0.0;
     double momentRmsNm = 0.0;
     double momentEquivalentAuthorityKgMm2 = 0.0;
     double momentDominantPhaseDeg = 0.0;
+
+    /// То же для проекций момента (Н·м).
+    double momentHarmonicAmpX = 0.0;
+    double momentHarmonicAmpY = 0.0;
+    double momentHarmonicAmpZ = 0.0;
+
+    /// Пик модуля вектора (Fx,Fy) гармоники порядка `order` по углу коленвала (Н); плоскость ⊥ Z.
+    double forceVectorPeakXY = 0.0;
+    /// Пик |(Fx,Fz)|; плоскость ⊥ Y.
+    double forceVectorPeakXZ = 0.0;
+    /// Пик |(Fy,Fz)|; плоскость ⊥ X.
+    double forceVectorPeakYZ = 0.0;
+
+    double momentVectorPeakXY = 0.0;
+    double momentVectorPeakXZ = 0.0;
+    double momentVectorPeakYZ = 0.0;
 };
 
 struct EquivalentBalanceTarget
@@ -47,6 +68,9 @@ EquivalentBalanceTarget BuildEquivalentBalanceTarget(
     const MassPropertiesInput& massInput);
 
 double ComputeCrankForceEquivalentProduct(const EngineModel& model);
+
+/// Сумма по доп. валам величины |Σ m r e^{iφ}| (одинаковые m,r по противовесам на валу):
+/// учитывает взаимное гашение сил 1ω/2ω (например два противовеса на 180° дают 0, а не 2mr).
 double ComputeBalancerForceEquivalentProduct(const EngineModel& model, int order);
 double ComputeMomentAuthorityEstimate(const EngineModel& model, int order);
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <wx/bitmap.h>
 #include <vector>
 #include <wx/panel.h>
 
@@ -38,7 +39,9 @@ private:
     void DrawCurrentAlphaMarker(wxDC& dc,
                                 const wxRect& plotRect,
                                 double alphaMin,
-                                double alphaMax);
+                                double alphaMax,
+                                double valueMin,
+                                double valueMax);
     void DrawEmptyState(wxDC& dc, const wxRect& rect);
 
     bool HasData() const;
@@ -48,12 +51,22 @@ private:
     double ExtractComponent(const engine::kinematic::Vec3& v) const;
     wxString GetMetricLabel() const;
 
-private:
+    void InvalidatePlotCache();
+    void EnsurePlotCache(const wxRect& plotRect,
+                         double alphaMin,
+                         double alphaMax,
+                         double valueMin,
+                         double valueMax);
+
     engine::balancing::BalancingComposedResult m_result;
     BalancingMetric m_metric = BalancingMetric::InertiaForce;
     BalancingViewMode m_viewMode = BalancingViewMode::Residual;
     BalancingComponent m_component = BalancingComponent::Magnitude;
     std::size_t m_currentAlphaIndex = 0;
+
+    wxBitmap m_plotCache;
+    bool m_plotCacheValid = false;
+    wxRect m_plotCacheArea{0, 0, 0, 0};
 
     wxDECLARE_EVENT_TABLE();
 };

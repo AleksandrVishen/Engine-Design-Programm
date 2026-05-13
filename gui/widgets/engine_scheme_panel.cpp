@@ -321,6 +321,9 @@ void EngineSchemePanel::ClearModel()
 
 void EngineSchemePanel::SetAnimationAlphaDeg(double alphaDeg)
 {
+    if (m_animationAlphaDeg == alphaDeg)
+        return;
+
     m_animationAlphaDeg = alphaDeg;
     Refresh();
 }

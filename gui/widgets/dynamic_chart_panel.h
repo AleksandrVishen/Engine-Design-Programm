@@ -1,5 +1,6 @@
 #pragma once
 
+#include <wx/bitmap.h>
 #include <vector>
 #include <wx/panel.h>
 
@@ -39,7 +40,9 @@ private:
     void DrawCurrentAlphaMarker(wxDC& dc,
                                 const wxRect& plotRect,
                                 double alphaMin,
-                                double alphaMax);
+                                double alphaMax,
+                                double valueMin,
+                                double valueMax);
     void DrawEmptyState(wxDC& dc, const wxRect& rect);
 
     bool HasData() const;
@@ -54,13 +57,23 @@ private:
     wxString GetMetricLabel() const;
     wxColour GetSeriesColour(std::size_t index) const;
 
-private:
+    void InvalidatePlotCache();
+    void EnsurePlotCache(const wxRect& plotRect,
+                         double alphaMin,
+                         double alphaMax,
+                         double valueMin,
+                         double valueMax);
+
     engine::dynamic::DynamicResult m_result;
     DynamicMetric m_metric = DynamicMetric::InertiaForce;
     DynamicComponent m_component = DynamicComponent::Magnitude;
     std::size_t m_currentAlphaIndex = 0;
     std::vector<int> m_selectedCylinderIndices;
     bool m_showTotal = false;
+
+    wxBitmap m_plotCache;
+    bool m_plotCacheValid = false;
+    wxRect m_plotCacheArea{0, 0, 0, 0};
 
     wxDECLARE_EVENT_TABLE();
 };

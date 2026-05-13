@@ -1,15 +1,30 @@
 {
-    "version": 3,
-    "configurePresets": [
-        {
-            "name": "msvc-vcpkg",
-            "generator": "Visual Studio 18 2026",
-"architecture": "x64",
-            "binaryDir": "${sourceDir}/build",
-            "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/scripts/buildsystems/vcpkg.cmake",
-                "VCPKG_TARGET_TRIPLET": "x64-windows"
-            }
-        }
-    ]
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "msvc-vcpkg",
+      "displayName": "VS 2026 + vcpkg (x64-windows)",
+      "generator": "Visual Studio 18 2026",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "C:/Developing_Applications_and_libs/vcpkg_git/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "VCPKG_TARGET_TRIPLET": "x64-windows"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "debug",
+      "displayName": "Debug",
+      "configurePreset": "msvc-vcpkg",
+      "configuration": "Debug"
+    },
+    {
+      "name": "release",
+      "displayName": "Release",
+      "configurePreset": "msvc-vcpkg",
+      "configuration": "Release"
+    }
+  ]
 }

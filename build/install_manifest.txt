@@ -1,1 +1,1 @@
-C:/Users/aleks/Documents/progs/engine_design/build/install/./engine_gui.exe
+C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/install/./engine_gui.exe

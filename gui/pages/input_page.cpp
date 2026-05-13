@@ -31,6 +31,11 @@ void InputPage::SetOnCalculationSucceeded(
     m_onCalculationSucceeded = std::move(handler);
 }
 
+void InputPage::SetOnInputChanged(std::function<void()> handler)
+{
+    m_onInputChanged = std::move(handler);
+}
+
 void InputPage::BuildUi()
 {
     SetBackgroundColour(wxColour(12, 18, 28));
@@ -83,11 +88,15 @@ void InputPage::BindEvents()
     m_inputPanel->SetOnDataChanged([this]()
     {
         UpdatePreview();
+        if (m_onInputChanged)
+            m_onInputChanged();
     });
 
     m_kinematicParamsPanel->SetOnDataChanged([this]()
     {
         UpdatePreview();
+        if (m_onInputChanged)
+            m_onInputChanged();
     });
 
     m_kinematicParamsPanel->SetOnCalculate([this]()
@@ -107,6 +116,25 @@ void InputPage::SetAlphaStep(double alphaStepDeg)
 double InputPage::GetAlphaStep() const
 {
     return m_inputPanel ? m_inputPanel->GetAlphaStep() : 1.0;
+}
+
+bool InputPage::BuildCurrentModel(EngineModel& model, wxString& errorText) const
+{
+    return BuildCalculationModel(model, errorText);
+}
+
+void InputPage::SetFromModel(const EngineModel& model)
+{
+    if (m_inputPanel)
+    {
+        m_inputPanel->SetAlphaStep(model.kinematic.alphaStepDeg);
+        m_inputPanel->SetFromModel(model);
+    }
+
+    if (m_kinematicParamsPanel)
+        m_kinematicParamsPanel->SetFromModel(model);
+
+    UpdatePreview();
 }
 
 bool InputPage::BuildPreviewModel(EngineModel& model) const
@@ -190,4 +218,9 @@ void InputPage::OnCalculateRequested()
 
     if (m_onCalculationSucceeded)
         m_onCalculationSucceeded(model, result);
+}
+
+void InputPage::RunKinematicCalculation()
+{
+    OnCalculateRequested();
 }

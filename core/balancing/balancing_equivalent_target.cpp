@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <complex>
 
 namespace engine::balancing
 {
@@ -91,34 +92,31 @@ ScalarHarmonicProjection ProjectScalarSeries(
     return projection;
 }
 
-double ComputeDominantComponentPhaseDeg(
-    const std::vector<double>& alphaDeg,
-    const std::vector<Vec3>& series,
-    int order)
+std::complex<double> HarmonicPhasor(const ScalarHarmonicProjection& p)
 {
-    if (alphaDeg.empty() || series.size() != alphaDeg.size() || order <= 0)
-        return 0.0;
+    return { p.c, -p.s };
+}
 
-    std::vector<double> xs(series.size(), 0.0);
-    std::vector<double> ys(series.size(), 0.0);
-    std::vector<double> zs(series.size(), 0.0);
+/// Для гармоники Re(Pa e^{iθ}), Re(Pb e^{iθ}) — максимум √(Fx²+Fy²) по θ за оборот (эллипс в плоскости).
+double PeakMagnitudeHarmonicPair(const ScalarHarmonicProjection& pa, const ScalarHarmonicProjection& pb)
+{
+    const std::complex<double> pha = HarmonicPhasor(pa);
+    const std::complex<double> phb = HarmonicPhasor(pb);
 
-    for (std::size_t i = 0; i < series.size(); ++i)
+    constexpr int kSamples = 36;
+    constexpr double kTwoPi = 2.0 * 3.14159265358979323846;
+
+    double peak = 0.0;
+    for (int k = 0; k < kSamples; ++k)
     {
-        xs[i] = series[i].x;
-        ys[i] = series[i].y;
-        zs[i] = series[i].z;
+        const double theta = kTwoPi * static_cast<double>(k) / static_cast<double>(kSamples);
+        const std::complex<double> ei{ std::cos(theta), std::sin(theta) };
+        const double fa = std::real(pha * ei);
+        const double fb = std::real(phb * ei);
+        peak = std::max(peak, std::hypot(fa, fb));
     }
 
-    const auto px = ProjectScalarSeries(alphaDeg, xs, order);
-    const auto py = ProjectScalarSeries(alphaDeg, ys, order);
-    const auto pz = ProjectScalarSeries(alphaDeg, zs, order);
-
-    if (px.amplitude >= py.amplitude && px.amplitude >= pz.amplitude)
-        return px.phaseDeg;
-    if (py.amplitude >= pz.amplitude)
-        return py.phaseDeg;
-    return pz.phaseDeg;
+    return peak;
 }
 
 double ComputeEquivalentForceProductKgMm(
@@ -164,10 +162,59 @@ HarmonicBalanceTarget BuildOrderTarget(
     target.momentEquivalentAuthorityKgMm2 =
         ComputeEquivalentMomentAuthorityKgMm2(target.momentAmplitudeNm, omegaMain);
 
-    target.forceDominantPhaseDeg =
-        ComputeDominantComponentPhaseDeg(alphaDeg, forceSeries, order);
-    target.momentDominantPhaseDeg =
-        ComputeDominantComponentPhaseDeg(alphaDeg, momentSeries, order);
+    const std::size_t n = alphaDeg.size();
+    std::vector<double> fx(n, 0.0);
+    std::vector<double> fy(n, 0.0);
+    std::vector<double> fz(n, 0.0);
+    std::vector<double> mx(n, 0.0);
+    std::vector<double> my(n, 0.0);
+    std::vector<double> mz(n, 0.0);
+
+    for (std::size_t i = 0; i < n; ++i)
+    {
+        fx[i] = forceSeries[i].x;
+        fy[i] = forceSeries[i].y;
+        fz[i] = forceSeries[i].z;
+        mx[i] = momentSeries[i].x;
+        my[i] = momentSeries[i].y;
+        mz[i] = momentSeries[i].z;
+    }
+
+    const auto pfx = ProjectScalarSeries(alphaDeg, fx, order);
+    const auto pfy = ProjectScalarSeries(alphaDeg, fy, order);
+    const auto pfz = ProjectScalarSeries(alphaDeg, fz, order);
+    const auto pmx = ProjectScalarSeries(alphaDeg, mx, order);
+    const auto pmy = ProjectScalarSeries(alphaDeg, my, order);
+    const auto pmz = ProjectScalarSeries(alphaDeg, mz, order);
+
+    target.forceHarmonicAmpX = pfx.amplitude;
+    target.forceHarmonicAmpY = pfy.amplitude;
+    target.forceHarmonicAmpZ = pfz.amplitude;
+    target.momentHarmonicAmpX = pmx.amplitude;
+    target.momentHarmonicAmpY = pmy.amplitude;
+    target.momentHarmonicAmpZ = pmz.amplitude;
+
+    target.forceVectorPeakXY = PeakMagnitudeHarmonicPair(pfx, pfy);
+    target.forceVectorPeakXZ = PeakMagnitudeHarmonicPair(pfx, pfz);
+    target.forceVectorPeakYZ = PeakMagnitudeHarmonicPair(pfy, pfz);
+
+    target.momentVectorPeakXY = PeakMagnitudeHarmonicPair(pmx, pmy);
+    target.momentVectorPeakXZ = PeakMagnitudeHarmonicPair(pmx, pmz);
+    target.momentVectorPeakYZ = PeakMagnitudeHarmonicPair(pmy, pmz);
+
+    if (pfx.amplitude >= pfy.amplitude && pfx.amplitude >= pfz.amplitude)
+        target.forceDominantPhaseDeg = pfx.phaseDeg;
+    else if (pfy.amplitude >= pfz.amplitude)
+        target.forceDominantPhaseDeg = pfy.phaseDeg;
+    else
+        target.forceDominantPhaseDeg = pfz.phaseDeg;
+
+    if (pmx.amplitude >= pmy.amplitude && pmx.amplitude >= pmz.amplitude)
+        target.momentDominantPhaseDeg = pmx.phaseDeg;
+    else if (pmy.amplitude >= pmz.amplitude)
+        target.momentDominantPhaseDeg = pmy.phaseDeg;
+    else
+        target.momentDominantPhaseDeg = pmz.phaseDeg;
 
     return target;
 }
@@ -263,6 +310,8 @@ double ComputeCrankForceEquivalentProduct(const EngineModel& model)
 
 double ComputeBalancerForceEquivalentProduct(const EngineModel& model, int order)
 {
+    constexpr double kPi = 3.14159265358979323846;
+
     double sum = 0.0;
 
     for (const auto& shaft : model.balancing.balancerShafts)
@@ -273,8 +322,22 @@ double ComputeBalancerForceEquivalentProduct(const EngineModel& model, int order
         if (SpeedOrderLocal(shaft.speedRatio) != order)
             continue;
 
-        const double count = static_cast<double>(shaft.counterweights.size());
-        sum += count * shaft.counterweightMassKg * shaft.counterweightRadiusMm;
+        const double m = shaft.counterweightMassKg;
+        const double r = shaft.counterweightRadiusMm;
+        if (m <= 0.0 || r <= 0.0 || shaft.counterweights.empty())
+            continue;
+
+        double re = 0.0;
+        double im = 0.0;
+        for (const auto& cw : shaft.counterweights)
+        {
+            const double rad = cw.phaseDeg * kPi / 180.0;
+            re += std::cos(rad);
+            im += std::sin(rad);
+        }
+
+        const double phaseSumMag = std::hypot(re, im);
+        sum += m * r * phaseSumMag;
     }
 
     return sum;

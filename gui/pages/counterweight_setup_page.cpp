@@ -7,6 +7,7 @@
 #include <wx/busyinfo.h>
 #include <wx/choicdlg.h>
 #include <wx/dialog.h>
+#include <wx/event.h>
 #include <wx/listbox.h>
 #include <wx/msgdlg.h>
 #include <wx/sizer.h>
@@ -450,4 +451,16 @@ void CounterweightSetupPage::OnAutobalance(wxCommandEvent& event)
 
     if (m_onInputChanged)
         m_onInputChanged();
+}
+
+void CounterweightSetupPage::RunPipelineCalculate()
+{
+    wxCommandEvent e(wxEVT_BUTTON);
+    OnCalculate(e);
+}
+
+void CounterweightSetupPage::RunAutobalance()
+{
+    wxCommandEvent e(wxEVT_BUTTON);
+    OnAutobalance(e);
 }

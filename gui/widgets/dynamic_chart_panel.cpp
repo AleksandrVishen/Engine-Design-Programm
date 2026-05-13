@@ -5,6 +5,7 @@
 #include <limits>
 
 #include <wx/dcbuffer.h>
+#include <wx/dcmemory.h>
 
 wxBEGIN_EVENT_TABLE(DynamicChartPanel, wxPanel)
     EVT_PAINT(DynamicChartPanel::OnPaint)
@@ -28,6 +29,7 @@ void DynamicChartPanel::SetResult(const engine::dynamic::DynamicResult& result)
     for (std::size_t i = 0; i < m_result.cylinders.size(); ++i)
         m_selectedCylinderIndices.push_back(static_cast<int>(i));
 
+    InvalidatePlotCache();
     Refresh();
 }
 
@@ -37,6 +39,7 @@ void DynamicChartPanel::SetMetric(DynamicMetric metric)
         return;
 
     m_metric = metric;
+    InvalidatePlotCache();
     Refresh();
 }
 
@@ -46,6 +49,7 @@ void DynamicChartPanel::SetComponent(DynamicComponent component)
         return;
 
     m_component = component;
+    InvalidatePlotCache();
     Refresh();
 }
 
@@ -58,19 +62,25 @@ void DynamicChartPanel::SetCurrentAlphaIndex(std::size_t index)
         return;
     }
 
-    m_currentAlphaIndex = std::min(index, m_result.alphaDeg.size() - 1);
+    const std::size_t clamped = std::min(index, m_result.alphaDeg.size() - 1);
+    if (m_currentAlphaIndex == clamped)
+        return;
+
+    m_currentAlphaIndex = clamped;
     Refresh();
 }
 
 void DynamicChartPanel::SetSelectedCylinderIndices(const std::vector<int>& indices)
 {
     m_selectedCylinderIndices = indices;
+    InvalidatePlotCache();
     Refresh();
 }
 
 void DynamicChartPanel::SetShowTotal(bool showTotal)
 {
     m_showTotal = showTotal;
+    InvalidatePlotCache();
     Refresh();
 }
 
@@ -320,13 +330,67 @@ void DynamicChartPanel::OnPaint(wxPaintEvent&)
         std::max(10, rect.width - 95),
         std::max(10, rect.height - 70));
 
-    DrawAxes(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
-    DrawSeries(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
-    DrawCurrentAlphaMarker(dc, plotRect, alphaMin, alphaMax);
+    EnsurePlotCache(plotRect, alphaMin, alphaMax, valueMin, valueMax);
+    if (m_plotCacheValid && m_plotCache.IsOk())
+        dc.DrawBitmap(m_plotCache, m_plotCacheArea.GetTopLeft(), false);
+    else
+    {
+        DrawAxes(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+        DrawSeries(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+    }
+
+    DrawCurrentAlphaMarker(dc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+}
+
+void DynamicChartPanel::InvalidatePlotCache()
+{
+    m_plotCacheValid = false;
+}
+
+void DynamicChartPanel::EnsurePlotCache(
+    const wxRect& plotRect,
+    double alphaMin,
+    double alphaMax,
+    double valueMin,
+    double valueMax)
+{
+    const wxRect cacheRect(
+        plotRect.x - 70,
+        plotRect.y - 28,
+        plotRect.width + 70 + 45,
+        plotRect.height + 28 + 56);
+
+    if (m_plotCacheValid && m_plotCache.IsOk() && m_plotCacheArea == cacheRect)
+        return;
+
+    if (cacheRect.width < 2 || cacheRect.height < 2)
+        return;
+
+    wxBitmap bmp(cacheRect.width, cacheRect.height, 24);
+    if (!bmp.IsOk())
+        return;
+
+    wxMemoryDC mdc;
+    mdc.SelectObject(bmp);
+    mdc.SetBackground(wxBrush(wxColour(20, 26, 38)));
+    mdc.Clear();
+    mdc.SetFont(GetFont());
+    mdc.SetDeviceOrigin(-cacheRect.x, -cacheRect.y);
+
+    DrawAxes(mdc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+    DrawSeries(mdc, plotRect, alphaMin, alphaMax, valueMin, valueMax);
+
+    mdc.SetDeviceOrigin(0, 0);
+    mdc.SelectObject(wxNullBitmap);
+
+    m_plotCache = bmp;
+    m_plotCacheArea = cacheRect;
+    m_plotCacheValid = true;
 }
 
 void DynamicChartPanel::OnSize(wxSizeEvent& event)
 {
+    InvalidatePlotCache();
     Refresh();
     event.Skip();
 }
@@ -476,21 +540,68 @@ void DynamicChartPanel::DrawSeries(wxDC& dc,
 void DynamicChartPanel::DrawCurrentAlphaMarker(wxDC& dc,
                                                const wxRect& plotRect,
                                                double alphaMin,
-                                               double alphaMax)
+                                               double alphaMax,
+                                               double valueMin,
+                                               double valueMax)
 {
     if (m_result.alphaDeg.empty())
         return;
 
-    const double alpha = m_result.alphaDeg[std::min(m_currentAlphaIndex, m_result.alphaDeg.size() - 1)];
+    const std::size_t index = std::min(m_currentAlphaIndex, m_result.alphaDeg.size() - 1);
+    const double alpha = m_result.alphaDeg[index];
 
     if (std::abs(alphaMax - alphaMin) < 1e-12)
         return;
 
-    const int x = plotRect.GetLeft() +
-                  static_cast<int>((alpha - alphaMin) * plotRect.GetWidth() / (alphaMax - alphaMin));
+    auto mapX = [&](double a) -> int
+    {
+        return plotRect.GetLeft() +
+               static_cast<int>((a - alphaMin) * plotRect.GetWidth() / (alphaMax - alphaMin));
+    };
 
-    dc.SetPen(wxPen(wxColour(255, 210, 90), 1));
-    dc.DrawLine(x, plotRect.GetTop(), x, plotRect.GetBottom());
+    auto mapY = [&](double value) -> int
+    {
+        if (std::abs(valueMax - valueMin) < 1e-12)
+            return plotRect.GetBottom();
+
+        return plotRect.GetBottom() -
+               static_cast<int>((value - valueMin) * plotRect.GetHeight() / (valueMax - valueMin));
+    };
+
+    constexpr int dotR = 5;
+    auto drawDot = [&](int px, int py, const wxColour& fill)
+    {
+        dc.SetPen(wxPen(wxColour(255, 255, 255), 2));
+        dc.SetBrush(wxBrush(fill));
+        dc.DrawEllipse(px - dotR, py - dotR, 2 * dotR, 2 * dotR);
+    };
+
+    if (m_showTotal)
+    {
+        const auto* total = GetTotalSeriesValues();
+        if (total != nullptr && index < total->size() && total->size() == m_result.alphaDeg.size())
+        {
+            const int px = mapX(alpha);
+            const int py = mapY(ExtractComponent((*total)[index]));
+            drawDot(px, py, wxColour(245, 245, 245));
+        }
+    }
+
+    std::size_t colorIndex = 0;
+    for (int idx : m_selectedCylinderIndices)
+    {
+        if (idx < 0 || idx >= static_cast<int>(m_result.cylinders.size()))
+            continue;
+
+        const auto& cylinder = m_result.cylinders[static_cast<std::size_t>(idx)];
+        const auto* values = GetCylinderSeriesValues(cylinder);
+        if (values == nullptr || values->size() != m_result.alphaDeg.size() || index >= values->size())
+            continue;
+
+        const int px = mapX(alpha);
+        const int py = mapY(ExtractComponent((*values)[index]));
+        drawDot(px, py, GetSeriesColour(colorIndex++));
+    }
 }
 
 void DynamicChartPanel::DrawEmptyState(wxDC& dc, const wxRect& rect)

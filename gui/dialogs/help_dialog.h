@@ -9,5 +9,6 @@ public:
 
 private:
     void BuildUi();
-    wxString BuildHelpText() const;
+    wxString BuildAboutText() const;
+    wxString BuildHotkeysText() const;
 };

@@ -1,5 +1,16 @@
 cmake_minimum_required(VERSION 3.20)
 
+# vcpkg: toolchain должен быть задан до project(), иначе find_package(wxWidgets) не подхватит пакеты.
+# Варианты: переменная окружения VCPKG_ROOT, или cmake -DCMAKE_TOOLCHAIN_FILE=.../vcpkg.cmake, или cmake --preset msvc-vcpkg
+if(NOT CMAKE_TOOLCHAIN_FILE)
+    if(DEFINED ENV{VCPKG_ROOT})
+        set(_VCPKG_TOOLCHAIN "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+        if(EXISTS "${_VCPKG_TOOLCHAIN}")
+            set(CMAKE_TOOLCHAIN_FILE "${_VCPKG_TOOLCHAIN}" CACHE FILEPATH "vcpkg toolchain")
+        endif()
+    endif()
+endif()
+
 project(engine_design LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -10,7 +21,12 @@ if(MSVC)
     add_compile_options(/W4 /permissive- /utf-8)
 endif()
 
-find_package(wxWidgets REQUIRED COMPONENTS core base)
+# От старого списка wx добавлен только компонент «html» (отчёт / wxHtmlWindow).
+if(NOT CMAKE_TOOLCHAIN_FILE AND NOT DEFINED ENV{VCPKG_ROOT})
+    message(STATUS "wxWidgets: задайте VCPKG_ROOT или CMAKE_TOOLCHAIN_FILE (см. CMakePresets.json, preset msvc-vcpkg).")
+endif()
+
+find_package(wxWidgets REQUIRED COMPONENTS core base html)
 include(${wxWidgets_USE_FILE})
 
 set(APP_SOURCES
@@ -58,7 +74,8 @@ set(APP_SOURCES
 
     gui/dialogs/settings_dialog.cpp
     gui/dialogs/help_dialog.cpp
-    gui/dialogs/window_size_dialog.cpp
+    gui/dialogs/report_dialog.cpp
+    gui/report/report_builder.cpp
     core/balancing/balancing_synthesizer.cpp
 
     app_icon.rc
@@ -129,7 +146,8 @@ set(APP_HEADERS
 
     gui/dialogs/settings_dialog.h
     gui/dialogs/help_dialog.h
-    gui/dialogs/window_size_dialog.h
+    gui/dialogs/report_dialog.h
+    gui/report/report_builder.h
 
     core/balancing/balancing_synthesizer.h
     core/balancing/balancing_synthesis.h
