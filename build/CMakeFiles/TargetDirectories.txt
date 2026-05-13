@@ -1,4 +1,0 @@
-C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/CMakeFiles/engine_gui.dir
-C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/CMakeFiles/INSTALL.dir
-C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/aleks/Documents/progs/Engine-Design-Programm/build/CMakeFiles/ZERO_CHECK.dir
