@@ -20,7 +20,6 @@ DynamicLegendPanel::DynamicLegendPanel(wxWindow* parent)
 
     SetScrollRate(0, 14);
     SetMinSize(wxSize(-1, 72));
-    SetMaxSize(wxSize(-1, 110));
 
     UpdateVirtualSize();
 }

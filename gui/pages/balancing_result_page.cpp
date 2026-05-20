@@ -10,6 +10,7 @@
 #include <wx/panel.h>
 #include <wx/slider.h>
 #include <wx/sizer.h>
+#include <wx/splitter.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 
@@ -45,26 +46,27 @@ void BalancingResultPage::BuildUi()
     root->Add(title, 0, wxLEFT | wxTOP | wxBOTTOM, 12);
     root->Add(new wxStaticLine(this), 0, wxEXPAND | wxBOTTOM, 10);
 
-    auto* contentSizer = new wxBoxSizer(wxHORIZONTAL);
+    auto* contentSplitter = new wxSplitterWindow(
+        this,
+        wxID_ANY,
+        wxDefaultPosition,
+        wxDefaultSize,
+        wxSP_LIVE_UPDATE | wxSP_3D);
+    contentSplitter->SetBackgroundColour(GetBackgroundColour());
+    contentSplitter->SetMinimumPaneSize(300);
+    contentSplitter->SetSashGravity(0.55);
 
-    auto* leftHostPanel = new wxPanel(this);
-    leftHostPanel->SetBackgroundColour(GetBackgroundColour());
-
-    auto* leftHostSizer = new wxBoxSizer(wxHORIZONTAL);
-
-    auto* leftContentPanel = new wxPanel(leftHostPanel);
-    leftContentPanel->SetBackgroundColour(GetBackgroundColour());
-    leftContentPanel->SetMinSize(wxSize(720, -1));
-    leftContentPanel->SetMaxSize(wxSize(720, -1));
+    auto* leftPane = new wxPanel(contentSplitter);
+    leftPane->SetBackgroundColour(GetBackgroundColour());
 
     auto* leftSizer = new wxBoxSizer(wxVERTICAL);
 
     auto* controlsSizer = new wxBoxSizer(wxHORIZONTAL);
 
-    auto* metricLabel = new wxStaticText(leftContentPanel, wxID_ANY, WXU8("Параметр:"));
+    auto* metricLabel = new wxStaticText(leftPane, wxID_ANY, WXU8("Параметр:"));
     metricLabel->SetForegroundColour(wxColour(230, 230, 230));
 
-    m_metricChoice = new wxChoice(leftContentPanel, wxID_ANY);
+    m_metricChoice = new wxChoice(leftPane, wxID_ANY);
     m_metricChoice->Append(WXU8("Полная сила инерции F"));
     m_metricChoice->Append(WXU8("Сила инерции 1-го порядка F1"));
     m_metricChoice->Append(WXU8("Сила инерции 2-го порядка F2"));
@@ -74,19 +76,19 @@ void BalancingResultPage::BuildUi()
     m_metricChoice->Append(WXU8("Момент от центробежной силы Mc"));
     m_metricChoice->SetSelection(0);
 
-    auto* viewModeLabel = new wxStaticText(leftContentPanel, wxID_ANY, WXU8("Режим:"));
+    auto* viewModeLabel = new wxStaticText(leftPane, wxID_ANY, WXU8("Режим:"));
     viewModeLabel->SetForegroundColour(wxColour(230, 230, 230));
 
-    m_viewModeChoice = new wxChoice(leftContentPanel, wxID_ANY);
+    m_viewModeChoice = new wxChoice(leftPane, wxID_ANY);
     m_viewModeChoice->Append(WXU8("Исходная"));
     m_viewModeChoice->Append(WXU8("Вклад противовесов"));
     m_viewModeChoice->Append(WXU8("Остаточная"));
     m_viewModeChoice->SetSelection(2);
 
-    auto* componentLabel = new wxStaticText(leftContentPanel, wxID_ANY, WXU8("Компонента:"));
+    auto* componentLabel = new wxStaticText(leftPane, wxID_ANY, WXU8("Компонента:"));
     componentLabel->SetForegroundColour(wxColour(230, 230, 230));
 
-    m_componentChoice = new wxChoice(leftContentPanel, wxID_ANY);
+    m_componentChoice = new wxChoice(leftPane, wxID_ANY);
     m_componentChoice->Append("X");
     m_componentChoice->Append("Y");
     m_componentChoice->Append("Z");
@@ -102,7 +104,7 @@ void BalancingResultPage::BuildUi()
 
     leftSizer->Add(controlsSizer, 0, wxBOTTOM, 10);
 
-    m_leftNotebook = new wxNotebook(leftContentPanel, wxID_ANY);
+    m_leftNotebook = new wxNotebook(leftPane, wxID_ANY);
 
     auto* chartPage = new wxPanel(m_leftNotebook);
     chartPage->SetBackgroundColour(GetBackgroundColour());
@@ -129,26 +131,24 @@ void BalancingResultPage::BuildUi()
     leftSizer->Add(m_leftNotebook, 1, wxEXPAND | wxBOTTOM, 10);
 
     m_summaryText = new wxStaticText(
-        leftContentPanel,
+        leftPane,
         wxID_ANY,
         WXU8("Результаты уравновешивания еще не рассчитаны."));
     m_summaryText->SetForegroundColour(wxColour(220, 220, 220));
     leftSizer->Add(m_summaryText, 0, wxEXPAND | wxBOTTOM, 8);
 
-    m_warningText = new wxStaticText(leftContentPanel, wxID_ANY, "");
+    m_warningText = new wxStaticText(leftPane, wxID_ANY, "");
     m_warningText->SetForegroundColour(wxColour(255, 210, 120));
     leftSizer->Add(m_warningText, 0, wxEXPAND);
 
-    leftContentPanel->SetSizer(leftSizer);
+    leftPane->SetSizer(leftSizer);
 
-    leftHostSizer->Add(leftContentPanel, 0, wxEXPAND);
-    leftHostSizer->AddStretchSpacer(1);
-
-    leftHostPanel->SetSizer(leftHostSizer);
+    auto* rightPane = new wxPanel(contentSplitter);
+    rightPane->SetBackgroundColour(GetBackgroundColour());
 
     auto* rightSizer = new wxBoxSizer(wxVERTICAL);
 
-    auto* schemeTitle = new wxStaticText(this, wxID_ANY, WXU8("Анимация механизма"));
+    auto* schemeTitle = new wxStaticText(rightPane, wxID_ANY, WXU8("Анимация механизма"));
     auto schemeTitleFont = schemeTitle->GetFont();
     schemeTitleFont.SetPointSize(schemeTitleFont.GetPointSize() + 3);
     schemeTitle->SetFont(schemeTitleFont);
@@ -156,16 +156,15 @@ void BalancingResultPage::BuildUi()
 
     rightSizer->Add(schemeTitle, 0, wxBOTTOM, 8);
 
-    m_schemePanel = new EngineSchemePanel(this);
-    m_schemePanel->SetMinSize(wxSize(-1, 620));
+    m_schemePanel = new EngineSchemePanel(rightPane);
     rightSizer->Add(m_schemePanel, 1, wxEXPAND | wxBOTTOM, 10);
 
-    m_currentAlphaText = new wxStaticText(this, wxID_ANY, WXU8("Текущий α: 0.0°"));
+    m_currentAlphaText = new wxStaticText(rightPane, wxID_ANY, WXU8("Текущий α: 0.0°"));
     m_currentAlphaText->SetForegroundColour(wxColour(230, 230, 230));
     rightSizer->Add(m_currentAlphaText, 0, wxBOTTOM, 8);
 
     m_alphaSlider = new wxSlider(
-        this,
+        rightPane,
         wxID_ANY,
         0,
         0,
@@ -177,9 +176,9 @@ void BalancingResultPage::BuildUi()
 
     auto* animationButtons = new wxBoxSizer(wxHORIZONTAL);
 
-    m_prevButton = new wxButton(this, wxID_ANY, WXU8("<"));
-    m_playPauseButton = new wxButton(this, wxID_ANY, WXU8("Play"));
-    m_nextButton = new wxButton(this, wxID_ANY, WXU8(">"));
+    m_prevButton = new wxButton(rightPane, wxID_ANY, WXU8("<"));
+    m_playPauseButton = new wxButton(rightPane, wxID_ANY, WXU8("Play"));
+    m_nextButton = new wxButton(rightPane, wxID_ANY, WXU8(">"));
 
     animationButtons->Add(m_prevButton, 0, wxRIGHT, 8);
     animationButtons->Add(m_playPauseButton, 0, wxRIGHT, 8);
@@ -187,10 +186,12 @@ void BalancingResultPage::BuildUi()
 
     rightSizer->Add(animationButtons, 0, wxBOTTOM, 6);
 
-    contentSizer->Add(leftHostPanel, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 12);
-    contentSizer->Add(rightSizer, 1, wxEXPAND | wxRIGHT | wxBOTTOM, 12);
+    rightPane->SetSizer(rightSizer);
 
-    root->Add(contentSizer, 1, wxEXPAND);
+    contentSplitter->SplitVertically(leftPane, rightPane);
+    contentSplitter->SetSashPosition(700);
+
+    root->Add(contentSplitter, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 12);
 
     SetSizer(root);
 

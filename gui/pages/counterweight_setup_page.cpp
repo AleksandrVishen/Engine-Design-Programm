@@ -10,7 +10,9 @@
 #include <wx/event.h>
 #include <wx/listbox.h>
 #include <wx/msgdlg.h>
+#include <wx/scrolwin.h>
 #include <wx/sizer.h>
+#include <wx/splitter.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
@@ -63,7 +65,7 @@ public:
         auto* topLabel = new wxStaticText(
             this,
             wxID_ANY,
-            WXU8("Выберите предпочтительный вариант. Слева — список вариантов, справа — подробное описание."));
+            WXU8("Выберите вариант. Слева — краткий список, справа — остаточные силы, моменты и состав схемы."));
         root->Add(topLabel, 0, wxALL, 10);
 
         auto* contentSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -78,7 +80,7 @@ public:
         contentSizer->Add(leftSizer, 0, wxEXPAND | wxALL, 10);
 
         auto* rightSizer = new wxBoxSizer(wxVERTICAL);
-        auto* rightLabel = new wxStaticText(this, wxID_ANY, WXU8("Подробности выбранного варианта"));
+        auto* rightLabel = new wxStaticText(this, wxID_ANY, WXU8("Параметры выбранного варианта"));
         rightSizer->Add(rightLabel, 0, wxLEFT | wxRIGHT | wxBOTTOM, 5);
 
         m_detailsCtrl = new wxTextCtrl(
@@ -128,13 +130,7 @@ private:
             return;
         }
 
-        wxString text;
-        text << WXU8("Название варианта:") << "\n";
-        text << m_titles[static_cast<std::size_t>(index)] << "\n\n";
-        text << WXU8("Описание:") << "\n";
-        text << m_descriptions[static_cast<std::size_t>(index)];
-
-        m_detailsCtrl->SetValue(text);
+        m_detailsCtrl->SetValue(m_descriptions[static_cast<std::size_t>(index)]);
         m_detailsCtrl->ShowPosition(0);
     }
 
@@ -164,14 +160,10 @@ private:
 } // namespace
 
 CounterweightSetupPage::CounterweightSetupPage(wxWindow* parent)
-    : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                       wxVSCROLL | wxHSCROLL)
+    : wxPanel(parent)
 {
-    SetScrollRate(10, 10);
-
     BuildUi();
     BindEvents();
-    FitInside();
 }
 
 void CounterweightSetupPage::SetModel(const EngineModel& model)
@@ -183,7 +175,8 @@ void CounterweightSetupPage::SetModel(const EngineModel& model)
 
     ApplyPreviewModel(model);
     Layout();
-    FitInside();
+    if (m_inputScroll)
+        m_inputScroll->FitInside();
 }
 
 std::optional<EngineModel> CounterweightSetupPage::GetUpdatedModel() const
@@ -229,14 +222,37 @@ void CounterweightSetupPage::BuildUi()
     root->Add(title, 0, wxLEFT | wxTOP | wxBOTTOM, 12);
     root->Add(new wxStaticLine(this), 0, wxEXPAND | wxBOTTOM, 12);
 
-    auto* contentSizer = new wxBoxSizer(wxHORIZONTAL);
+    auto* contentSplitter = new wxSplitterWindow(
+        this,
+        wxID_ANY,
+        wxDefaultPosition,
+        wxDefaultSize,
+        wxSP_LIVE_UPDATE | wxSP_3D);
+    contentSplitter->SetBackgroundColour(GetBackgroundColour());
+    contentSplitter->SetMinimumPaneSize(360);
+    contentSplitter->SetSashGravity(0.55);
 
-    m_inputPanel = new CounterweightInputPanel(this);
-    m_inputPanel->SetMinSize(wxSize(600, -1));
+    m_inputScroll = new wxScrolledWindow(
+        contentSplitter,
+        wxID_ANY,
+        wxDefaultPosition,
+        wxDefaultSize,
+        wxVSCROLL);
+    m_inputScroll->SetScrollRate(10, 10);
+    m_inputScroll->SetBackgroundColour(GetBackgroundColour());
+
+    m_inputPanel = new CounterweightInputPanel(m_inputScroll);
+
+    auto* scrollSizer = new wxBoxSizer(wxVERTICAL);
+    scrollSizer->Add(m_inputPanel, 1, wxEXPAND);
+    m_inputScroll->SetSizer(scrollSizer);
+
+    auto* rightPane = new wxPanel(contentSplitter);
+    rightPane->SetBackgroundColour(GetBackgroundColour());
 
     auto* rightSizer = new wxBoxSizer(wxVERTICAL);
 
-    auto* schemeTitle = new wxStaticText(this, wxID_ANY, WXU8("Схема двигателя и противовесов"));
+    auto* schemeTitle = new wxStaticText(rightPane, wxID_ANY, WXU8("Схема двигателя и противовесов"));
     auto schemeTitleFont = schemeTitle->GetFont();
     schemeTitleFont.SetPointSize(schemeTitleFont.GetPointSize() + 5);
     schemeTitle->SetFont(schemeTitleFont);
@@ -244,14 +260,15 @@ void CounterweightSetupPage::BuildUi()
 
     rightSizer->Add(schemeTitle, 0, wxLEFT | wxBOTTOM, 6);
 
-    m_schemePanel = new EngineSchemePanel(this);
-    m_schemePanel->SetMinSize(wxSize(-1, 350));
+    m_schemePanel = new EngineSchemePanel(rightPane);
     rightSizer->Add(m_schemePanel, 1, wxEXPAND);
 
-    contentSizer->Add(m_inputPanel, 0, wxEXPAND | wxRIGHT, 18);
-    contentSizer->Add(rightSizer, 1, wxEXPAND);
+    rightPane->SetSizer(rightSizer);
 
-    root->Add(contentSizer, 1, wxEXPAND);
+    contentSplitter->SplitVertically(m_inputScroll, rightPane);
+    contentSplitter->SetSashPosition(620);
+
+    root->Add(contentSplitter, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 12);
 
     auto* bottomSizer = new wxBoxSizer(wxHORIZONTAL);
     bottomSizer->AddStretchSpacer(1);
@@ -268,7 +285,7 @@ void CounterweightSetupPage::BuildUi()
 
     SetSizer(root);
     Layout();
-    FitInside();
+    m_inputScroll->FitInside();
 }
 
 void CounterweightSetupPage::BindEvents()
@@ -285,7 +302,8 @@ void CounterweightSetupPage::BindEvents()
             m_onInputChanged();
 
         Layout();
-        FitInside();
+        if (m_inputScroll)
+            m_inputScroll->FitInside();
     });
 
     if (m_calculateButton)

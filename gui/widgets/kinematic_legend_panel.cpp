@@ -14,8 +14,7 @@ KinematicLegendPanel::KinematicLegendPanel(wxWindow* parent)
     SetBackgroundColour(wxColour(22, 28, 42));
     SetForegroundColour(wxColour(235, 235, 235));
 
-    SetMinSize(wxSize(-1, 130));
-    SetMaxSize(wxSize(-1, 150));
+    SetMinSize(wxSize(-1, 72));
 
     m_rootSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(m_rootSizer);

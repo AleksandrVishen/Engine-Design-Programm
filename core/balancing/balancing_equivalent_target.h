@@ -17,6 +17,11 @@ struct HarmonicBalanceTarget
     double forceEquivalentProductKgMm = 0.0;
     double forceDominantPhaseDeg = 0.0;
 
+    /// Фаза гармоники порядка `order` для Fx/Fy/Fz (град.), из гармонической проекции по alpha.
+    double forceHarmonicPhaseDegX = 0.0;
+    double forceHarmonicPhaseDegY = 0.0;
+    double forceHarmonicPhaseDegZ = 0.0;
+
     /// Амплитуда гармоники порядка `order` для проекций вектора силы на X/Y/Z (Н), из DFT по углу коленвала.
     double forceHarmonicAmpX = 0.0;
     double forceHarmonicAmpY = 0.0;
@@ -73,5 +78,13 @@ double ComputeCrankForceEquivalentProduct(const EngineModel& model);
 /// учитывает взаимное гашение сил 1ω/2ω (например два противовеса на 180° дают 0, а не 2mr).
 double ComputeBalancerForceEquivalentProduct(const EngineModel& model, int order);
 double ComputeMomentAuthorityEstimate(const EngineModel& model, int order);
+
+/// Подстраивает фазы противовесов на доп. валах под гармонику силы нужного порядка
+/// (сохраняя относительные сдвиги внутри шаблона размещения).
+void AlignBalancerPhasesInModel(EngineModel& model, const EquivalentBalanceTarget& target);
+
+/// Пересчитывает массы противовесов на доп. валах из эквивалентной гармоники (с учётом order²).
+void RecalibrateBalancerCounterweightMasses(EngineModel& model,
+                                            const EquivalentBalanceTarget& target);
 
 } // namespace engine::balancing

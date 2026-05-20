@@ -1,7 +1,9 @@
 #include "gui/pages/input_page.h"
 
 #include <wx/msgdlg.h>
+#include <wx/scrolwin.h>
 #include <wx/sizer.h>
+#include <wx/splitter.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 
@@ -14,15 +16,11 @@
 #include "core/kinematic/kinematic_solver.h"
 
 InputPage::InputPage(wxWindow* parent)
-    : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                       wxVSCROLL | wxHSCROLL)
+    : wxPanel(parent)
 {
-    SetScrollRate(10, 10);
-
     BuildUi();
     BindEvents();
     UpdatePreview();
-    FitInside();
 }
 
 void InputPage::SetOnCalculationSucceeded(
@@ -53,17 +51,40 @@ void InputPage::BuildUi()
     root->Add(title, 0, wxLEFT | wxTOP | wxBOTTOM, 12);
     root->Add(new wxStaticLine(this), 0, wxEXPAND | wxBOTTOM, 12);
 
-    auto* contentSizer = new wxBoxSizer(wxHORIZONTAL);
+    auto* contentSplitter = new wxSplitterWindow(
+        this,
+        wxID_ANY,
+        wxDefaultPosition,
+        wxDefaultSize,
+        wxSP_LIVE_UPDATE | wxSP_3D);
+    contentSplitter->SetBackgroundColour(GetBackgroundColour());
+    contentSplitter->SetMinimumPaneSize(320);
+    contentSplitter->SetSashGravity(0.5);
 
-    m_inputPanel = new EngineInputPanel(this);
-    m_schemePanel = new EngineSchemePanel(this);
-    m_kinematicParamsPanel = new KinematicParamsPanel(this);
+    m_inputScroll = new wxScrolledWindow(
+        contentSplitter,
+        wxID_ANY,
+        wxDefaultPosition,
+        wxDefaultSize,
+        wxVSCROLL);
+    m_inputScroll->SetScrollRate(10, 10);
+    m_inputScroll->SetBackgroundColour(GetBackgroundColour());
 
-    m_inputPanel->SetMinSize(wxSize(560, -1));
+    m_inputPanel = new EngineInputPanel(m_inputScroll);
+
+    auto* scrollSizer = new wxBoxSizer(wxVERTICAL);
+    scrollSizer->Add(m_inputPanel, 1, wxEXPAND);
+    m_inputScroll->SetSizer(scrollSizer);
+
+    auto* rightPane = new wxPanel(contentSplitter);
+    rightPane->SetBackgroundColour(GetBackgroundColour());
+
+    m_schemePanel = new EngineSchemePanel(rightPane);
+    m_kinematicParamsPanel = new KinematicParamsPanel(rightPane);
 
     auto* rightSizer = new wxBoxSizer(wxVERTICAL);
 
-    auto* schemeTitle = new wxStaticText(this, wxID_ANY, WXU8("Схема коленчатого вала"));
+    auto* schemeTitle = new wxStaticText(rightPane, wxID_ANY, WXU8("Схема коленчатого вала"));
     auto schemeTitleFont = schemeTitle->GetFont();
     schemeTitleFont.SetPointSize(schemeTitleFont.GetPointSize() + 5);
     schemeTitle->SetFont(schemeTitleFont);
@@ -73,14 +94,16 @@ void InputPage::BuildUi()
     rightSizer->Add(m_schemePanel, 1, wxEXPAND | wxBOTTOM, 14);
     rightSizer->Add(m_kinematicParamsPanel, 0, wxEXPAND);
 
-    contentSizer->Add(m_inputPanel, 0, wxEXPAND | wxRIGHT, 18);
-    contentSizer->Add(rightSizer, 1, wxEXPAND);
+    rightPane->SetSizer(rightSizer);
 
-    root->Add(contentSizer, 1, wxEXPAND);
+    contentSplitter->SplitVertically(m_inputScroll, rightPane);
+    contentSplitter->SetSashPosition(560);
+
+    root->Add(contentSplitter, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 12);
 
     SetSizer(root);
     Layout();
-    FitInside();
+    m_inputScroll->FitInside();
 }
 
 void InputPage::BindEvents()
@@ -170,7 +193,8 @@ void InputPage::UpdatePreview()
         m_schemePanel->ClearModel();
 
     Layout();
-    FitInside();
+    if (m_inputScroll)
+        m_inputScroll->FitInside();
 }
 
 void InputPage::OnCalculateRequested()

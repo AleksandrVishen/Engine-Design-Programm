@@ -1,15 +1,16 @@
 #pragma once
 
 #include <functional>
-#include <wx/scrolwin.h>
+#include <wx/panel.h>
 #include "core/kinematic/kinematic_result.h"
 #include "core/model/engine_model.h"
 
 class EngineInputPanel;
 class EngineSchemePanel;
 class KinematicParamsPanel;
+class wxScrolledWindow;
 
-class InputPage : public wxScrolledWindow
+class InputPage : public wxPanel
 {
 public:
     explicit InputPage(wxWindow* parent);
@@ -35,6 +36,7 @@ private:
     void OnCalculateRequested();
 
 private:
+    wxScrolledWindow* m_inputScroll = nullptr;
     EngineInputPanel* m_inputPanel = nullptr;
     EngineSchemePanel* m_schemePanel = nullptr;
     KinematicParamsPanel* m_kinematicParamsPanel = nullptr;

@@ -5,6 +5,7 @@
 #include <wx/grid.h>
 #include <wx/msgdlg.h>
 #include <wx/sizer.h>
+#include <wx/splitter.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
@@ -13,15 +14,11 @@
 #include "gui/widgets/engine_scheme_panel.h"
 
 MassPropertiesPage::MassPropertiesPage(wxWindow* parent)
-    : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                       wxVSCROLL | wxHSCROLL)
+    : wxPanel(parent)
 {
-    SetScrollRate(10, 10);
-
     BuildUi();
     BindEvents();
     UpdateSchemeReferencePoint();
-    FitInside();
 }
 
 void MassPropertiesPage::SetModel(const EngineModel& model)
@@ -34,7 +31,6 @@ void MassPropertiesPage::SetModel(const EngineModel& model)
     }
 
     Layout();
-    FitInside();
 }
 
 void MassPropertiesPage::SetOnCalculateRequested(std::function<void(const MassPropertiesInput&)> handler)
@@ -99,17 +95,18 @@ void MassPropertiesPage::BuildUi()
     root->Add(title, 0, wxLEFT | wxTOP | wxBOTTOM, 12);
     root->Add(new wxStaticLine(this), 0, wxEXPAND | wxBOTTOM, 10);
 
-    auto* contentSizer = new wxBoxSizer(wxHORIZONTAL);
+    auto* contentSplitter = new wxSplitterWindow(
+        this,
+        wxID_ANY,
+        wxDefaultPosition,
+        wxDefaultSize,
+        wxSP_LIVE_UPDATE | wxSP_3D);
+    contentSplitter->SetBackgroundColour(GetBackgroundColour());
+    contentSplitter->SetMinimumPaneSize(280);
+    contentSplitter->SetSashGravity(0.4);
 
-    auto* leftHostPanel = new wxPanel(this);
-    leftHostPanel->SetBackgroundColour(GetBackgroundColour());
-
-    auto* leftHostSizer = new wxBoxSizer(wxHORIZONTAL);
-
-    auto* leftContentPanel = new wxPanel(leftHostPanel);
-    leftContentPanel->SetBackgroundColour(GetBackgroundColour());
-    leftContentPanel->SetMinSize(wxSize(520, -1));
-    leftContentPanel->SetMaxSize(wxSize(520, -1));
+    auto* leftPane = new wxPanel(contentSplitter);
+    leftPane->SetBackgroundColour(GetBackgroundColour());
 
     auto* leftSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -117,19 +114,19 @@ void MassPropertiesPage::BuildUi()
     formGrid->AddGrowableCol(1, 1);
 
     auto* diameterLabel =
-        new wxStaticText(leftContentPanel, wxID_ANY, WXU8("Диаметр цилиндра, мм.:"));
+        new wxStaticText(leftPane, wxID_ANY, WXU8("Диаметр цилиндра, мм.:"));
     auto* reciprocatingLabel =
-        new wxStaticText(leftContentPanel, wxID_ANY, WXU8("Масса поступат. частей, кг.:"));
+        new wxStaticText(leftPane, wxID_ANY, WXU8("Масса поступат. частей, кг.:"));
     auto* rotatingLabel =
-        new wxStaticText(leftContentPanel, wxID_ANY, WXU8("Масса вращат. частей, кг.:"));
+        new wxStaticText(leftPane, wxID_ANY, WXU8("Масса вращат. частей, кг.:"));
 
     diameterLabel->SetForegroundColour(wxColour(230, 230, 230));
     reciprocatingLabel->SetForegroundColour(wxColour(230, 230, 230));
     rotatingLabel->SetForegroundColour(wxColour(230, 230, 230));
 
-    m_cylinderDiameterCtrl = new wxTextCtrl(leftContentPanel, wxID_ANY, "30");
-    m_reciprocatingMassCtrl = new wxTextCtrl(leftContentPanel, wxID_ANY, "0.5");
-    m_rotatingMassCtrl = new wxTextCtrl(leftContentPanel, wxID_ANY, "1.5");
+    m_cylinderDiameterCtrl = new wxTextCtrl(leftPane, wxID_ANY, "30");
+    m_reciprocatingMassCtrl = new wxTextCtrl(leftPane, wxID_ANY, "0.5");
+    m_rotatingMassCtrl = new wxTextCtrl(leftPane, wxID_ANY, "1.5");
 
     formGrid->Add(diameterLabel, 0, wxALIGN_CENTER_VERTICAL);
     formGrid->Add(m_cylinderDiameterCtrl, 1, wxEXPAND);
@@ -143,13 +140,13 @@ void MassPropertiesPage::BuildUi()
     leftSizer->Add(formGrid, 0, wxEXPAND | wxTOP | wxBOTTOM, 24);
 
     auto* refLabel = new wxStaticText(
-        leftContentPanel,
+        leftPane,
         wxID_ANY,
         WXU8("Координаты точки, относительно которой\nпроизводится расчёт моментов от сил инерции:"));
     refLabel->SetForegroundColour(wxColour(230, 230, 230));
     leftSizer->Add(refLabel, 0, wxBOTTOM, 10);
 
-    m_referenceGrid = new wxGrid(leftContentPanel, wxID_ANY);
+    m_referenceGrid = new wxGrid(leftPane, wxID_ANY);
     m_referenceGrid->CreateGrid(1, 3);
     m_referenceGrid->EnableEditing(true);
     m_referenceGrid->EnableDragGridSize(false);
@@ -170,38 +167,35 @@ void MassPropertiesPage::BuildUi()
     m_referenceGrid->SetColSize(0, 92);
     m_referenceGrid->SetColSize(1, 92);
     m_referenceGrid->SetColSize(2, 92);
-    m_referenceGrid->SetMinSize(wxSize(340, 90));
+    m_referenceGrid->SetMinSize(wxSize(280, 90));
 
-    leftSizer->Add(m_referenceGrid, 0, wxBOTTOM, 24);
-    leftSizer->AddStretchSpacer(1);
+    leftSizer->Add(m_referenceGrid, 0, wxEXPAND | wxBOTTOM, 24);
 
-    leftContentPanel->SetSizer(leftSizer);
+    leftPane->SetSizer(leftSizer);
 
-    leftHostSizer->Add(leftContentPanel, 0, wxEXPAND);
-    leftHostSizer->AddStretchSpacer(1);
-    leftHostPanel->SetSizer(leftHostSizer);
+    auto* rightPane = new wxPanel(contentSplitter);
+    rightPane->SetBackgroundColour(GetBackgroundColour());
 
     auto* rightSizer = new wxBoxSizer(wxVERTICAL);
 
-    auto* schemeTitle = new wxStaticText(this, wxID_ANY, WXU8("Схема коленчатого вала"));
+    auto* schemeTitle = new wxStaticText(rightPane, wxID_ANY, WXU8("Схема коленчатого вала"));
     auto schemeTitleFont = schemeTitle->GetFont();
     schemeTitleFont.SetPointSize(schemeTitleFont.GetPointSize() + 3);
     schemeTitle->SetFont(schemeTitleFont);
     schemeTitle->SetForegroundColour(wxColour(245, 245, 245));
     rightSizer->Add(schemeTitle, 0, wxBOTTOM, 8);
 
-    m_schemePanel = new EngineSchemePanel(this);
+    m_schemePanel = new EngineSchemePanel(rightPane);
     m_schemePanel->SetShowReferencePoint(true);
-    m_schemePanel->SetMinSize(wxSize(-1, 560));
-    m_schemePanel->SetMaxSize(wxSize(-1, 560));
 
-    rightSizer->Add(m_schemePanel, 0, wxEXPAND);
-    rightSizer->AddStretchSpacer(1);
+    rightSizer->Add(m_schemePanel, 1, wxEXPAND);
 
-    contentSizer->Add(leftHostPanel, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 12);
-    contentSizer->Add(rightSizer, 1, wxEXPAND | wxRIGHT | wxBOTTOM, 12);
+    rightPane->SetSizer(rightSizer);
 
-    root->Add(contentSizer, 1, wxEXPAND);
+    contentSplitter->SplitVertically(leftPane, rightPane);
+    contentSplitter->SetSashPosition(420);
+
+    root->Add(contentSplitter, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 12);
 
     auto* bottomSizer = new wxBoxSizer(wxHORIZONTAL);
     bottomSizer->AddStretchSpacer(1);
@@ -214,7 +208,6 @@ void MassPropertiesPage::BuildUi()
 
     SetSizer(root);
     Layout();
-    FitInside();
 }
 
 void MassPropertiesPage::BindEvents()

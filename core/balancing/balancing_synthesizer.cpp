@@ -208,6 +208,46 @@ void AddWarning(BalancingSynthesisResult& result, const std::string& text)
     result.warnings.push_back({ text });
 }
 
+int CountAdditionalBalancerShafts(const EngineModel& model)
+{
+    int count = 0;
+    for (const auto& shaft : model.balancing.balancerShafts)
+    {
+        if (shaft.enabled)
+            ++count;
+    }
+
+    return count;
+}
+
+int CountCounterweights(const EngineModel& model)
+{
+    int count = 0;
+
+    const auto& crankCw = model.balancing.crankCounterweights;
+    if (crankCw.enabled && crankCw.massKg > 0.0 && crankCw.radiusMm > 0.0)
+    {
+        int crankCountTotal = 0;
+        for (const auto& shaft : model.shafts)
+            crankCountTotal += static_cast<int>(shaft.cranks.size());
+
+        const int countPerCrank =
+            (crankCw.countMode == CounterweightCountMode::TwoPerCrank) ? 2 : 1;
+
+        count += crankCountTotal * countPerCrank;
+    }
+
+    for (const auto& shaft : model.balancing.balancerShafts)
+    {
+        if (!shaft.enabled)
+            continue;
+
+        count += static_cast<int>(shaft.counterweights.size());
+    }
+
+    return count;
+}
+
 double ComputeTotalCounterweightMassKg(const EngineModel& model)
 {
     double totalMassKg = 0.0;
@@ -373,25 +413,17 @@ std::string GoalCodeToString(BalancingSynthesisGoalKind goal)
 }
 
 std::string BuildTitle(const BalancingSynthesisCandidateMetrics& m,
-                       const RankedScore& ranked,
-                       double score,
-                       const SynthesisSchemeDescriptor& scheme,
-                       BalancingSynthesisGoalKind goal)
+                       const SynthesisSchemeDescriptor& scheme)
 {
     std::ostringstream oss;
     oss << std::fixed << std::setprecision(3);
     oss << scheme.name
-        << " | goal=" << GoalCodeToString(goal)
-        << " | S=" << score
-        << " | P=" << ranked.primaryResidual
-        << " | S2=" << ranked.secondaryResidual
         << " | Fc=" << m.rmsFc
         << " | Mc=" << m.rmsMc
         << " | F1=" << m.rmsF1
         << " | F2=" << m.rmsF2
         << " | M1=" << m.rmsM1
-        << " | M2=" << m.rmsM2
-        << " | валов=" << m.balancerShaftCount;
+        << " | M2=" << m.rmsM2;
     return oss.str();
 }
 
@@ -421,7 +453,8 @@ double ComputeCrankCounterweightMassKg(double rotatingMassKg,
 
 double ComputeBalancerCounterweightMassKg(double requiredForceEquivalentProductKgMm,
                                           double counterweightRadiusMm,
-                                          int totalCounterweightCountForOrder)
+                                          int totalCounterweightCountForOrder,
+                                          int speedOrder)
 {
     if (requiredForceEquivalentProductKgMm <= 0.0 ||
         counterweightRadiusMm <= 0.0 ||
@@ -430,8 +463,13 @@ double ComputeBalancerCounterweightMassKg(double requiredForceEquivalentProductK
         return 0.0;
     }
 
+    const int order = std::max(1, speedOrder);
+    const double orderFactor = static_cast<double>(order * order);
+
+    // Q = m*r суммарно даёт F ~ m*(order*ω)²*r; для 2ω нужен делитель order².
     return requiredForceEquivalentProductKgMm /
-           (counterweightRadiusMm * static_cast<double>(totalCounterweightCountForOrder));
+           (counterweightRadiusMm * static_cast<double>(totalCounterweightCountForOrder) *
+            orderFactor);
 }
 
 bool IsReasonableCrankCounterweightMass(double massKg)
@@ -650,51 +688,23 @@ BalancingSynthesisCandidateExplanation BuildExplanation(
 }
 
 std::string BuildDescription(const EngineModel& model,
-                             const CandidateDescriptor& descriptor,
-                             const BalancingSynthesisCandidateExplanation& explanation)
+                             const BalancingSynthesisCandidateMetrics& metrics)
 {
     std::ostringstream oss;
     oss << std::fixed << std::setprecision(3);
 
-    oss << "Схема=" << descriptor.scheme.name
-        << " | " << explanation.goalSummary
-        << " | " << explanation.strengths
-        << " | " << explanation.weaknesses
-        << " | " << explanation.complexitySummary;
+    oss << "Остаточные силы и моменты:\n"
+        << "Fc = " << metrics.rmsFc << "\n"
+        << "Mc = " << metrics.rmsMc << "\n"
+        << "F1 = " << metrics.rmsF1 << "\n"
+        << "F2 = " << metrics.rmsF2 << "\n"
+        << "M1 = " << metrics.rmsM1 << "\n"
+        << "M2 = " << metrics.rmsM2 << "\n"
+        << "F  = " << metrics.rmsF << "\n"
+        << "M  = " << metrics.rmsM << "\n\n"
+        << "Дополнительных валов: " << CountAdditionalBalancerShafts(model) << "\n"
+        << "Противовесов: " << CountCounterweights(model);
 
-    oss << " | щеки: m=" << model.balancing.crankCounterweights.massKg
-        << " кг, r=" << model.balancing.crankCounterweights.radiusMm
-        << " мм, режим=";
-
-    switch (model.balancing.crankCounterweights.countMode)
-    {
-    case CounterweightCountMode::Auto: oss << "Auto"; break;
-    case CounterweightCountMode::OnePerCrank: oss << "1"; break;
-    case CounterweightCountMode::TwoPerCrank: oss << "2"; break;
-    }
-
-    oss << " | доп. валов=" << model.balancing.balancerShafts.size();
-
-    if (!model.balancing.balancerShafts.empty())
-    {
-        oss << " | [";
-        for (std::size_t i = 0; i < model.balancing.balancerShafts.size(); ++i)
-        {
-            const auto& shaft = model.balancing.balancerShafts[i];
-            if (i > 0)
-                oss << "; ";
-
-            oss << "ось=" << AxisToString(shaft.axis)
-                << ", speed=" << SpeedToString(shaft.speedRatio)
-                << ", m=" << shaft.counterweightMassKg
-                << ", r=" << shaft.counterweightRadiusMm
-                << ", L=" << shaft.lengthMm
-                << ", n=" << shaft.counterweights.size();
-        }
-        oss << "]";
-    }
-
-    oss << " | " << explanation.decisionReason;
     return oss.str();
 }
 
@@ -1107,11 +1117,14 @@ void AddMixedCrankCounterweightsIfReasonable(EngineModel& model,
 
 void CollectCandidate(std::map<std::string, PendingCandidate>& pendingCandidates,
                       const EquivalentBalanceTarget& target,
-                      const EngineModel& candidateModel,
+                      EngineModel candidateModel,
                       BalancingSynthesisGoalKind goal,
                       double crankRadiusMm,
                       const SynthesisSchemeDescriptor& scheme)
 {
+    AlignBalancerPhasesInModel(candidateModel, target);
+    RecalibrateBalancerCounterweightMasses(candidateModel, target);
+
     const FastCandidateScore fastScore =
         EvaluateFast(candidateModel, target, scheme, goal, crankRadiusMm);
 
@@ -1208,6 +1221,9 @@ void RefineTopPendingNeighborhood(std::map<std::string, PendingCandidate>& pendi
                         cw.positionAlongShaftMm *= lengthRatio;
                 }
 
+                AlignBalancerPhasesInModel(model, target);
+                RecalibrateBalancerCounterweightMasses(model, target);
+
                 CollectCandidate(pendingCandidates,
                                    target,
                                    model,
@@ -1250,8 +1266,8 @@ std::optional<BalancingSynthesisCandidate> TryEvaluatePendingCandidate(
 
     candidate.score = CollapseRankedScore(descriptor.rankedScore);
     candidate.explanation = BuildExplanation(goal, pending.model, candidate.metrics, descriptor, candidate.score);
-    candidate.title = BuildTitle(candidate.metrics, descriptor.rankedScore, candidate.score, pending.scheme, goal);
-    candidate.description = BuildDescription(pending.model, descriptor, candidate.explanation);
+    candidate.title = BuildTitle(candidate.metrics, pending.scheme);
+    candidate.description = BuildDescription(pending.model, candidate.metrics);
 
     return candidate;
 }
@@ -1547,7 +1563,8 @@ void GenerateForScheme(std::map<std::string, PendingCandidate>& pendingCandidate
                                         ComputeBalancerCounterweightMassKg(
                                             requiredForceProductKgMm,
                                             radiusMm,
-                                            counterweightCount);
+                                            counterweightCount,
+                                            SpeedOrder(speed));
 
                                     if (!IsReasonableBalancerCounterweightMass(massKg))
                                         continue;
@@ -1610,7 +1627,8 @@ void GenerateForScheme(std::map<std::string, PendingCandidate>& pendingCandidate
                                         ComputeBalancerCounterweightMassKg(
                                             requiredForceProductKgMm,
                                             radiusMm,
-                                            totalCounterweightCount);
+                                            totalCounterweightCount,
+                                            SpeedOrder(speedA));
 
                                     if (!IsReasonableBalancerCounterweightMass(massKg))
                                         continue;
@@ -1657,13 +1675,15 @@ void GenerateForScheme(std::map<std::string, PendingCandidate>& pendingCandidate
                                             ComputeBalancerCounterweightMassKg(
                                                 target.order1.forceEquivalentProductKgMm,
                                                 radiusMm,
-                                                counterweightCount);
+                                                counterweightCount,
+                                                1);
 
                                         const double mass2 =
                                             ComputeBalancerCounterweightMassKg(
                                                 target.order2.forceEquivalentProductKgMm,
                                                 radiusMm,
-                                                counterweightCount);
+                                                counterweightCount,
+                                                2);
 
                                         if (!IsReasonableBalancerCounterweightMass(mass1) ||
                                             !IsReasonableBalancerCounterweightMass(mass2))
@@ -1707,13 +1727,15 @@ void GenerateForScheme(std::map<std::string, PendingCandidate>& pendingCandidate
                                             ComputeBalancerCounterweightMassKg(
                                                 target.order1.forceEquivalentProductKgMm,
                                                 radiusMm,
-                                                countOrder1);
+                                                countOrder1,
+                                                1);
 
                                         const double mass2 =
                                             ComputeBalancerCounterweightMassKg(
                                                 target.order2.forceEquivalentProductKgMm,
                                                 radiusMm,
-                                                countOrder2);
+                                                countOrder2,
+                                                2);
 
                                         if (!IsReasonableBalancerCounterweightMass(mass1) ||
                                             !IsReasonableBalancerCounterweightMass(mass2))
@@ -1769,7 +1791,8 @@ void GenerateForScheme(std::map<std::string, PendingCandidate>& pendingCandidate
                                         ComputeBalancerCounterweightMassKg(
                                             requiredForceProductKgMm,
                                             radiusMm,
-                                            totalCounterweightCount);
+                                            totalCounterweightCount,
+                                            SpeedOrder(speed));
 
                                     if (!IsReasonableBalancerCounterweightMass(massKg))
                                         continue;
@@ -1815,13 +1838,15 @@ void GenerateForScheme(std::map<std::string, PendingCandidate>& pendingCandidate
                                             ComputeBalancerCounterweightMassKg(
                                                 target.order1.forceEquivalentProductKgMm,
                                                 radiusMm,
-                                                countOrder1);
+                                                countOrder1,
+                                                1);
 
                                         const double mass2 =
                                             ComputeBalancerCounterweightMassKg(
                                                 target.order2.forceEquivalentProductKgMm,
                                                 radiusMm,
-                                                countOrder2);
+                                                countOrder2,
+                                                2);
 
                                         if (!IsReasonableBalancerCounterweightMass(mass1) ||
                                             !IsReasonableBalancerCounterweightMass(mass2))

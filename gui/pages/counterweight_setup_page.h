@@ -2,16 +2,17 @@
 
 #include <functional>
 #include <optional>
-#include <wx/scrolwin.h>
+#include <wx/panel.h>
 
 #include "core/balancing/balancing_synthesis.h"
 #include "core/model/engine_model.h"
 
 class wxButton;
+class wxScrolledWindow;
 class CounterweightInputPanel;
 class EngineSchemePanel;
 
-class CounterweightSetupPage : public wxScrolledWindow
+class CounterweightSetupPage : public wxPanel
 {
 public:
     explicit CounterweightSetupPage(wxWindow* parent);
@@ -40,6 +41,7 @@ private:
 private:
     std::optional<EngineModel> m_model;
 
+    wxScrolledWindow* m_inputScroll = nullptr;
     CounterweightInputPanel* m_inputPanel = nullptr;
     EngineSchemePanel* m_schemePanel = nullptr;
     wxButton* m_calculateButton = nullptr;

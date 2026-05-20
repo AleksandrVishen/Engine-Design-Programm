@@ -215,7 +215,7 @@ void EngineInputPanel::BuildUi()
     m_shaftOriginGrid->SetColLabelValue(0, WXU8("X, мм"));
     m_shaftOriginGrid->SetColLabelValue(1, WXU8("Y, мм"));
     m_shaftOriginGrid->SetColLabelValue(2, WXU8("Z, мм"));
-    m_shaftOriginGrid->SetMinSize(wxSize(510, 120));
+    m_shaftOriginGrid->SetMinSize(wxSize(300, 120));
     SetupGridColors(m_shaftOriginGrid);
     root->Add(m_shaftOriginGrid, 0, wxEXPAND | wxBOTTOM, 14);
 
@@ -227,7 +227,7 @@ void EngineInputPanel::BuildUi()
     m_phaseGrid->CreateGrid(1, 1);
     m_phaseGrid->EnableEditing(true);
     m_phaseGrid->EnableDragRowSize(false);
-    m_phaseGrid->SetMinSize(wxSize(510, 140));
+    m_phaseGrid->SetMinSize(wxSize(300, 140));
     SetupGridColors(m_phaseGrid);
     root->Add(m_phaseGrid, 0, wxEXPAND | wxBOTTOM, 8);
 
@@ -239,7 +239,7 @@ void EngineInputPanel::BuildUi()
     m_axisTiltGrid->CreateGrid(1, 1);
     m_axisTiltGrid->EnableEditing(true);
     m_axisTiltGrid->EnableDragRowSize(false);
-    m_axisTiltGrid->SetMinSize(wxSize(510, 140));
+    m_axisTiltGrid->SetMinSize(wxSize(300, 140));
     SetupGridColors(m_axisTiltGrid);
     root->Add(m_axisTiltGrid, 0, wxEXPAND);
 

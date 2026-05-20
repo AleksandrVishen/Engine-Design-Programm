@@ -190,6 +190,9 @@ HarmonicBalanceTarget BuildOrderTarget(
     target.forceHarmonicAmpX = pfx.amplitude;
     target.forceHarmonicAmpY = pfy.amplitude;
     target.forceHarmonicAmpZ = pfz.amplitude;
+    target.forceHarmonicPhaseDegX = pfx.phaseDeg;
+    target.forceHarmonicPhaseDegY = pfy.phaseDeg;
+    target.forceHarmonicPhaseDegZ = pfz.phaseDeg;
     target.momentHarmonicAmpX = pmx.amplitude;
     target.momentHarmonicAmpY = pmy.amplitude;
     target.momentHarmonicAmpZ = pmz.amplitude;
@@ -337,10 +340,125 @@ double ComputeBalancerForceEquivalentProduct(const EngineModel& model, int order
         }
 
         const double phaseSumMag = std::hypot(re, im);
-        sum += m * r * phaseSumMag;
+        const double orderFactor = static_cast<double>(order * order);
+        sum += m * r * phaseSumMag * orderFactor;
     }
 
     return sum;
+}
+
+double NormalizePhaseDeg(double phaseDeg)
+{
+    double normalized = std::fmod(phaseDeg, 360.0);
+    if (normalized < 0.0)
+        normalized += 360.0;
+    return normalized;
+}
+
+int SpeedRatioSign(BalancerSpeedRatio ratio)
+{
+    switch (ratio)
+    {
+    case BalancerSpeedRatio::Minus1W:
+    case BalancerSpeedRatio::Minus2W:
+        return -1;
+    case BalancerSpeedRatio::Plus1W:
+    case BalancerSpeedRatio::Plus2W:
+    default:
+        return 1;
+    }
+}
+
+double BaseBalancerCounterweightPhaseDeg(BalancerAxis axis,
+                                         const HarmonicBalanceTarget& harmonic)
+{
+    double phaseDeg = 0.0;
+
+    switch (axis)
+    {
+    case BalancerAxis::X:
+        phaseDeg = harmonic.forceHarmonicPhaseDegZ;
+        break;
+
+    case BalancerAxis::Y:
+        phaseDeg = harmonic.forceHarmonicPhaseDegZ;
+        break;
+
+    case BalancerAxis::Z:
+    default:
+        phaseDeg = harmonic.forceHarmonicPhaseDegY;
+        break;
+    }
+
+    return NormalizePhaseDeg(phaseDeg);
+}
+
+void AlignBalancerPhasesInModel(EngineModel& model, const EquivalentBalanceTarget& target)
+{
+    for (auto& shaft : model.balancing.balancerShafts)
+    {
+        if (!shaft.enabled || shaft.counterweights.empty())
+            continue;
+
+        const int order = SpeedOrderLocal(shaft.speedRatio);
+        const HarmonicBalanceTarget& harmonic =
+            (order == 2) ? target.order2 : target.order1;
+
+        const double plusOrderPhase =
+            BaseBalancerCounterweightPhaseDeg(shaft.axis, harmonic);
+
+        const double basePhase =
+            (SpeedRatioSign(shaft.speedRatio) < 0)
+                ? NormalizePhaseDeg(-plusOrderPhase)
+                : plusOrderPhase;
+
+        const double patternRef = shaft.counterweights.front().phaseDeg;
+
+        for (auto& cw : shaft.counterweights)
+        {
+            const double relativeOffset =
+                NormalizePhaseDeg(cw.phaseDeg - patternRef);
+            cw.phaseDeg = NormalizePhaseDeg(basePhase + relativeOffset);
+        }
+    }
+}
+
+void RecalibrateBalancerCounterweightMasses(EngineModel& model,
+                                            const EquivalentBalanceTarget& target)
+{
+    for (int order : { 1, 2 })
+    {
+        const HarmonicBalanceTarget& harmonic =
+            (order == 2) ? target.order2 : target.order1;
+
+        const double requiredProduct = harmonic.forceEquivalentProductKgMm;
+        if (requiredProduct <= 0.0)
+            continue;
+
+        int totalCounterweightCount = 0;
+        for (const auto& shaft : model.balancing.balancerShafts)
+        {
+            if (!shaft.enabled || SpeedOrderLocal(shaft.speedRatio) != order)
+                continue;
+
+            totalCounterweightCount += static_cast<int>(shaft.counterweights.size());
+        }
+
+        if (totalCounterweightCount <= 0)
+            continue;
+
+        for (auto& shaft : model.balancing.balancerShafts)
+        {
+            if (!shaft.enabled || SpeedOrderLocal(shaft.speedRatio) != order)
+                continue;
+
+            const double radiusMm = std::max(1.0, shaft.counterweightRadiusMm);
+            shaft.counterweightMassKg =
+                requiredProduct /
+                (radiusMm * static_cast<double>(totalCounterweightCount) *
+                 static_cast<double>(order * order));
+        }
+    }
 }
 
 double ComputeMomentAuthorityEstimate(const EngineModel& model, int order)

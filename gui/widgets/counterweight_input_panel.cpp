@@ -214,7 +214,7 @@ void CounterweightInputPanel::BuildUi()
     m_balancerShaftGrid->EnableDragGridSize(false);
     m_balancerShaftGrid->EnableDragRowSize(false);
     m_balancerShaftGrid->EnableDragColSize(false);
-    m_balancerShaftGrid->SetMinSize(wxSize(620, 110));
+    m_balancerShaftGrid->SetMinSize(wxSize(400, 110));
     SetupGridColors(m_balancerShaftGrid);
     balancerGroup->Add(m_balancerShaftGrid, 0, wxEXPAND | wxALL, 6);
 
@@ -266,7 +266,7 @@ void CounterweightInputPanel::BuildUi()
     m_balancerPhaseGrid->EnableDragGridSize(false);
     m_balancerPhaseGrid->EnableDragRowSize(false);
     m_balancerPhaseGrid->EnableDragColSize(false);
-    m_balancerPhaseGrid->SetMinSize(wxSize(620, 120));
+    m_balancerPhaseGrid->SetMinSize(wxSize(400, 120));
     SetupGridColors(m_balancerPhaseGrid);
     balancerGroup->Add(m_balancerPhaseGrid, 0, wxEXPAND | wxALL, 6);
 

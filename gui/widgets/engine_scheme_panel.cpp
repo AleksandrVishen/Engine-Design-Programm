@@ -253,7 +253,7 @@ EngineSchemePanel::EngineSchemePanel(wxWindow* parent)
     : wxPanel(parent)
 {
     SetBackgroundStyle(wxBG_STYLE_PAINT);
-    SetMinSize(wxSize(520, 420));
+    SetMinSize(wxSize(280, 280));
     ResetView();
 
     m_helpButton = new wxButton(this, wxID_ANY, "?", wxPoint(0, 0), wxSize(28, 28));

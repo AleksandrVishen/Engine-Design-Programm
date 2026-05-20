@@ -367,7 +367,7 @@ MainFrame::MainFrame(const wxString& startupProjectPath)
     BuildUi();
     BindEvents();
     UpdateWindowTitle();
-    SetMinSize(wxSize(1200, 760));
+    SetMinSize(wxSize(1000, 640));
     ApplySafeWindowBounds(wxSize(1720, 920));
     TryLoadLastProjectAtStartup();
 }
@@ -414,7 +414,7 @@ void MainFrame::BuildUi()
     auto* root = new wxBoxSizer(wxHORIZONTAL);
 
     m_navigationPanel = new NavigationPanel(this);
-    m_navigationPanel->SetMinSize(wxSize(245, -1));
+    m_navigationPanel->SetMinSize(wxSize(220, -1));
 
     m_book = new wxSimplebook(this, wxID_ANY);
     m_book->SetBackgroundColour(wxColour(12, 18, 28));

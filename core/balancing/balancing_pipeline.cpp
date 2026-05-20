@@ -7,6 +7,8 @@
 
 #include "core/balancing/balancing_calculator.h"
 #include "core/balancing/balancing_composer.h"
+#include "core/balancing/balancing_equivalent_target.h"
+#include "core/model/mass_properties_input.h"
 
 namespace engine::balancing
 {
@@ -118,7 +120,14 @@ BalancingPipelineResult BalancingPipeline::Run(
         return result;
     }
 
-    const BalancingBuildResult buildResult = BalancingModelBuilder::Build(sourceModel);
+    EngineModel workingModel = sourceModel;
+    const MassPropertiesInput massInput;
+    const EquivalentBalanceTarget phaseTarget =
+        BuildEquivalentBalanceTarget(workingModel, dynamicResult, massInput);
+    AlignBalancerPhasesInModel(workingModel, phaseTarget);
+    RecalibrateBalancerCounterweightMasses(workingModel, phaseTarget);
+
+    const BalancingBuildResult buildResult = BalancingModelBuilder::Build(workingModel);
     TransferBuilderMessages(buildResult, result);
 
     if (!buildResult.ok)
@@ -132,7 +141,7 @@ BalancingPipelineResult BalancingPipeline::Run(
     try
     {
         const BalancingCalculator calculator;
-        result.balancingResult = calculator.Calculate(sourceModel, result.normalizedModel, input);
+        result.balancingResult = calculator.Calculate(workingModel, result.normalizedModel, input);
 
         const BalancingComposer composer;
         result.composedResult = composer.Compose(dynamicResult, result.balancingResult);

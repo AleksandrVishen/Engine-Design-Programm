@@ -47,7 +47,7 @@ KinematicChartPanel::KinematicChartPanel(wxWindow* parent)
     : wxPanel(parent)
 {
     SetBackgroundStyle(wxBG_STYLE_PAINT);
-    SetMinSize(wxSize(620, 320));
+    SetMinSize(wxSize(240, 260));
     SetBackgroundColour(wxColour(18, 24, 36));
     SetForegroundColour(wxColour(235, 235, 235));
 }

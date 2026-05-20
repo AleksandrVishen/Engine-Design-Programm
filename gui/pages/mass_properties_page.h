@@ -2,7 +2,7 @@
 
 #include <functional>
 #include <wx/grid.h>
-#include <wx/scrolwin.h>
+#include <wx/panel.h>
 
 #include "core/model/engine_model.h"
 #include "core/model/mass_properties_input.h"
@@ -11,7 +11,7 @@ class wxButton;
 class wxTextCtrl;
 class EngineSchemePanel;
 
-class MassPropertiesPage : public wxScrolledWindow
+class MassPropertiesPage : public wxPanel
 {
 public:
     explicit MassPropertiesPage(wxWindow* parent);
